@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">MovieDBTraining</string>
+
+    <string name="nav_movies">Movies</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_favo">Favorites</string>
+    <string name="nav_rate">Rated</string>
+
+    <string name="openDrawer">open_drawer</string>
+    <string name="closeDrawer">close_drawer</string>
+    <string name="url_profile_temp">http://lazi.vn/files/large/5882c16b2facb14</string>
+    <string name="personal">Personal</string>
+
+    <string-array name="nav_item_activity_titles">
+        <item>Movies</item>
+        <item>Favorites</item>
+        <item>Rated</item>
+    </string-array>
 </resources>

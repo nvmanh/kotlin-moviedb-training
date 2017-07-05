@@ -24,3 +24,16 @@ allprojects {
 task clean(type: Delete) {
   delete rootProject.buildDir
 }
+ext{
+  supportLibraryVersion = '25.3.1'
+  gsonVersion = '2.8.0'
+  glideVersion = '3.7.0'
+  retrofitVersion = '2.0.2'
+  okhttpVersion = '3.3.0'
+  daggerVersion = '2.11'
+  rxjavaVersion = '1.1.5'
+  rxandroidVersion = '1.2.0'
+  rxAdapterVersion = '2.0.1'
+  loggingVersion = '3.2.0'
+  gsonConverterVersion = '2.0.2'
+}

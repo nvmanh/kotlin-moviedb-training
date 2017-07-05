@@ -7,3 +7,9 @@
 /build
 /captures
 .externalNativeBuild
+/.idea/misc.xml
+MovieDBTraining.iml
+/MovieDBTraining/.idea
+/.MovieDBTraining/.idea/misc.xml
+.idea/modules.xml
+.idea

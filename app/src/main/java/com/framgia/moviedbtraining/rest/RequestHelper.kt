@@ -1,9 +1,15 @@
 package com.framgia.moviedbtraining.rest
 
+import com.framgia.moviedbtraining.App
+import com.framgia.moviedbtraining.R
 import com.framgia.moviedbtraining.constants.Constants
+import com.framgia.moviedbtraining.login.LoginContract
 import com.framgia.moviedbtraining.model.Movie
 import com.framgia.moviedbtraining.model.MoviesResponse
+import com.framgia.moviedbtraining.model.ServiceResponse
+import com.framgia.moviedbtraining.model.User
 import com.framgia.moviedbtraining.movies.NowPlayingContractNew
+import com.framgia.moviedbtraining.utils.ApplicationPrefs
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -12,6 +18,8 @@ import retrofit2.Response
  * Created by FRAMGIA\babatunde.fatoye.sunday on 7/6/17.
  */
 object RequestHelper {
+
+  val mPref: ApplicationPrefs = ApplicationPrefs()
 
   fun getNowPlaying(page: Int, mViewModel: NowPlayingContractNew.ViewModel): List<Movie>? {
     mViewModel.showLoading()
@@ -36,5 +44,89 @@ object RequestHelper {
       }
     })
     return movieList
+  }
+
+  fun getToken(viewModel: LoginContract.ViewModel, username: String, password: String) {
+    viewModel.showLoading()
+    val apiService = ApiClient.client.create(ApiInterface::class.java)
+    val call = apiService.getToken(Constants.API_KEY)
+    call.enqueue(object : Callback<ServiceResponse> {
+      override fun onResponse(call: Call<ServiceResponse>, response: Response<ServiceResponse>) {
+        if (response.isSuccessful) {
+          viewModel.hideLoading()
+          var token = response.body()!!.token
+          authLogin(viewModel, username, password, token)
+        }
+      }
+
+      override fun onFailure(call: Call<ServiceResponse>, t: Throwable) {
+        viewModel.hideLoading()
+        viewModel.showSnack(t.message.toString())
+      }
+    })
+  }
+
+  fun authLogin(viewModel: LoginContract.ViewModel, username: String, password: String,
+      token: String) {
+    viewModel.showLoading()
+    val apiService = ApiClient.client.create(ApiInterface::class.java)
+    val call = apiService.authWithLogin(Constants.API_KEY, username, password, token)
+    call.enqueue(object : Callback<ServiceResponse> {
+      override fun onResponse(call: Call<ServiceResponse>, response: Response<ServiceResponse>) {
+        viewModel.hideLoading()
+        if (response.isSuccessful) {
+          getSessionId(viewModel, token)
+        } else {
+          viewModel.showSnack(App.self().getString(R.string.err_msg_login_failed))
+        }
+      }
+
+      override fun onFailure(call: Call<ServiceResponse>, t: Throwable) {
+        viewModel.hideLoading()
+        viewModel.showSnack(t.message.toString())
+      }
+    })
+  }
+
+  fun getSessionId(viewModel: LoginContract.ViewModel, token: String) {
+    viewModel.showLoading()
+    val apiService = ApiClient.client.create(ApiInterface::class.java)
+    val call = apiService.getSessionId(Constants.API_KEY, token)
+    call.enqueue(object : Callback<ServiceResponse> {
+      override fun onResponse(call: Call<ServiceResponse>, response: Response<ServiceResponse>) {
+        viewModel.hideLoading()
+        if (response.isSuccessful) {
+          val sessionId = response.body()!!.session
+          mPref.setSessionId(sessionId)
+          getUser(viewModel, sessionId)
+        }
+      }
+
+      override fun onFailure(call: Call<ServiceResponse>, t: Throwable) {
+        viewModel.hideLoading()
+        viewModel.showSnack(t.message.toString())
+      }
+    })
+  }
+
+  fun getUser(viewModel: LoginContract.ViewModel, sessionId: String) {
+    viewModel.showLoading()
+    val apiService = ApiClient.client.create(ApiInterface::class.java)
+    val call = apiService.getAccount(Constants.API_KEY, sessionId)
+    call.enqueue(object : Callback<User> {
+      override fun onResponse(call: Call<User>, response: Response<User>) {
+        viewModel.hideLoading()
+        if (response.isSuccessful) {
+          val user = response.body()
+          mPref.setUser(user!!)
+          viewModel.userData(user)
+        }
+      }
+
+      override fun onFailure(call: Call<User>, t: Throwable) {
+        viewModel.hideLoading()
+        viewModel.showSnack(t.message.toString())
+      }
+    })
   }
 }

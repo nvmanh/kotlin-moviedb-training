@@ -9,18 +9,25 @@ import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.framgia.moviedbtraining.constants.Constants
 import com.framgia.moviedbtraining.favorites.FavoritesActivity
 import com.framgia.moviedbtraining.login.LoginActivity
+import com.framgia.moviedbtraining.model.User
 import com.framgia.moviedbtraining.movies.MovieFragment
 import com.framgia.moviedbtraining.rated.RatedActivity
+import com.framgia.moviedbtraining.utils.ApplicationPrefs
 import com.framgia.moviedbtraining.utils.CircleTransform
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_main.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,9 +41,11 @@ class MainActivity : AppCompatActivity() {
   var navItemIndex = TAG_NOW
   private var mHandler: Handler? = null
   private var imgProfile: ImageView? = null
+  private var tvUsername: TextView? = null
   private var imgSearch: ImageView? = null
   private val mFlagOnBackPress = true
   private val sizeProfile: Float = 0.5f
+  private var mPref: ApplicationPrefs? = ApplicationPrefs()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -44,6 +53,7 @@ class MainActivity : AppCompatActivity() {
     setSupportActionBar(toolbar)
     setDataProfile()
     setUpNavigationView()
+    setUpUser()
     activityTitles = resources.getStringArray(R.array.nav_item_activity_titles)
     mHandler = Handler()
     if (savedInstanceState == null) {
@@ -121,6 +131,7 @@ class MainActivity : AppCompatActivity() {
   private fun setDataProfile() {
     imgProfile = mNaviView.getHeaderView(0).findViewById(R.id.img_profile) as ImageView
     imgSearch = mNaviView.getHeaderView(0).findViewById(R.id.img_search) as ImageView
+    tvUsername = mNaviView.getHeaderView(0).findViewById(R.id.tv_username) as TextView
     Glide.with(this).load(getString(R.string.url_profile_temp))
         .crossFade()
         .thumbnail(sizeProfile)
@@ -128,8 +139,26 @@ class MainActivity : AppCompatActivity() {
         .diskCacheStrategy(DiskCacheStrategy.ALL)
         .into(imgProfile)
     imgProfile!!.setOnClickListener({
-      startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+      if (mPref!!.getLoginStatus()) {
+        //Todo UserProfile Activity
+      } else {
+        startActivityForResult(Intent(this@MainActivity, LoginActivity::class.java), 11)
+      }
     })
+  }
+
+  fun setUpUser() {
+    if (!mPref!!.getLoginStatus()) return
+    var user: User = mPref!!.getUser()
+    loadUserDetails(user)
+  }
+
+  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    super.onActivityResult(requestCode, resultCode, data)
+    if (resultCode == Activity.RESULT_OK) {
+      val user: User = mPref!!.getUser()
+      loadUserDetails(user)
+    }
   }
 
   private fun startActivity(activity: Activity) {
@@ -148,5 +177,21 @@ class MainActivity : AppCompatActivity() {
       return
     }
     super.onBackPressed()
+  }
+
+  fun loadUserDetails(user: User) {
+    Glide.with(this).load(
+        Constants.GRAVATAR_URL + user.avatar!!.gravatar!!.hash + Constants.GRAVATAR_SIZE)
+        .crossFade()
+        .thumbnail(sizeProfile)
+        .bitmapTransform(CircleTransform(this))
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+        .into(imgProfile)
+    if (!TextUtils.isEmpty(user.name)) {
+      tvUsername!!.text = user.name
+    } else {
+      tvUsername!!.text = user.username
+    }
+
   }
 }

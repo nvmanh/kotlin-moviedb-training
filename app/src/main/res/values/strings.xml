@@ -21,8 +21,13 @@
     //LoginScreen
     <string name="str_username">Username (case sensitive)</string>
     <string name="str_password">Password</string>
+    <string name="str_login">Login</string>
     <string name="err_msg_username">Enter username</string>
     <string name="err_msg_password">Enter password</string>
+    <string name="err_msg_login_failed">Login failed. Please recheck username or password</string>
+    <string name="str_register">Register</string>
+    <string name="err_msg_min_password">Password (4 characters minimum)</string>
+    <string name="err_web_browser">No application can handle this request.\" + \" Please install a webbrowser</string>
 
     <string-array name="nav_item_activity_titles">
         <item>Now Playing</item>

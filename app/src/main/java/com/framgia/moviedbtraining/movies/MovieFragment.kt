@@ -13,8 +13,16 @@ import com.framgia.moviedbtraining.R
 
 class MovieFragment : Fragment() {
 
+  private var mType: Int = 0
+
   override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
       savedInstanceState: Bundle?): View? {
     return inflater!!.inflate(R.layout.fragment_movie, container, false)
+  }
+
+  fun newinstance(type: Int): MovieFragment {
+    val movieFragment = MovieFragment()
+    mType = type
+    return movieFragment
   }
 }

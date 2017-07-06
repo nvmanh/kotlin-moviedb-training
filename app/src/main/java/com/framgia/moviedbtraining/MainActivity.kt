@@ -11,9 +11,11 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.framgia.moviedbtraining.favorites.FavoritesActivity
+import com.framgia.moviedbtraining.login.LoginActivity
 import com.framgia.moviedbtraining.movies.MovieFragment
 import com.framgia.moviedbtraining.rated.RatedActivity
 import com.framgia.moviedbtraining.utils.CircleTransform
@@ -125,6 +127,9 @@ class MainActivity : AppCompatActivity() {
         .bitmapTransform(CircleTransform(this))
         .diskCacheStrategy(DiskCacheStrategy.ALL)
         .into(imgProfile)
+    imgProfile!!.setOnClickListener({
+      startActivity(Intent(this@MainActivity, LoginActivity::class.java))
+    })
   }
 
   private fun startActivity(activity: Activity) {

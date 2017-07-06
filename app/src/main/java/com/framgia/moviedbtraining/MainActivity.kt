@@ -1,5 +1,6 @@
 package com.framgia.moviedbtraining
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -12,24 +13,26 @@ import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.framgia.moviedbtraining.favorites.FavoritesFragment
+import com.framgia.moviedbtraining.favorites.FavoritesActivity
 import com.framgia.moviedbtraining.movies.MovieFragment
-import com.framgia.moviedbtraining.rated.RatedFragment
-import com.framgia.moviedbtraining.search.SearchActivity
+import com.framgia.moviedbtraining.rated.RatedActivity
 import com.framgia.moviedbtraining.utils.CircleTransform
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_main.*
 
 class MainActivity : AppCompatActivity() {
 
-  private val TAG_MOVIE: Int = 0
-  private val TAG_FAVOR: Int = 1
-  private val TAG_RATED: Int = 2
+  val TAG_NOW: Int = 0
+  val TAG_POPULAR: Int = 1
+  val TAG_TOP_RATED: Int = 2
+  val TAG_UPCOMING: Int = 3
 
   private var activityTitles: Array<String>? = null
-  var navItemIndex = TAG_MOVIE
+  val movieFragment: MovieFragment = MovieFragment()
+  var navItemIndex = TAG_NOW
   private var mHandler: Handler? = null
   private var imgProfile: ImageView? = null
+  private var imgSearch: ImageView? = null
   private val mFlagOnBackPress = true
   private val sizeProfile: Float = 0.5f
 
@@ -42,13 +45,13 @@ class MainActivity : AppCompatActivity() {
     activityTitles = resources.getStringArray(R.array.nav_item_activity_titles)
     mHandler = Handler()
     if (savedInstanceState == null) {
-      navItemIndex = TAG_MOVIE
+      navItemIndex = TAG_NOW
       loadMovieFragment()
     }
   }
 
   private fun loadMovieFragment() {
-    navi_view.getMenu().getItem(navItemIndex).setChecked(true)
+    mNaviView.menu.getItem(navItemIndex).setChecked(true)
     supportActionBar!!.setTitle(activityTitles!![navItemIndex])
     val mPendingRunnable = Runnable {
       val fragment = getMoviesFragment()
@@ -59,51 +62,46 @@ class MainActivity : AppCompatActivity() {
       fragmentTransaction.commitAllowingStateLoss()
     }
     mHandler!!.post(mPendingRunnable)
-    drawer_layout.closeDrawers()
+    mDrawerLayout.closeDrawers()
     invalidateOptionsMenu()
   }
 
   private fun getMoviesFragment(): Fragment {
-    when (navItemIndex) {
-      TAG_MOVIE -> {
-        return MovieFragment()
-      }
-      TAG_FAVOR -> {
-        return FavoritesFragment()
-      }
-      TAG_RATED -> {
-        return RatedFragment()
-      }
-      else -> return MovieFragment()
-    }
+    return movieFragment.newinstance(navItemIndex)
   }
 
   private fun setUpNavigationView() {
-    navi_view.setNavigationItemSelectedListener(
+    mNaviView.setNavigationItemSelectedListener(
         NavigationView.OnNavigationItemSelectedListener { menuItem ->
           when (menuItem.itemId) {
-            R.id.nav_movies -> {
-              navItemIndex = TAG_MOVIE
+            R.id.nav_now_playing -> {
+              navItemIndex = TAG_NOW
             }
-            R.id.nav_search -> {
-              startActivity(Intent(this@MainActivity, SearchActivity::class.java))
-              drawer_layout.closeDrawers()
-              return@OnNavigationItemSelectedListener true
+            R.id.nav_popular -> {
+              navItemIndex = TAG_POPULAR
+            }
+            R.id.nav_top_rated -> {
+              navItemIndex = TAG_TOP_RATED
+            }
+            R.id.nav_upcoming -> {
+              navItemIndex = TAG_UPCOMING
             }
             R.id.nav_favo -> {
-              navItemIndex = TAG_FAVOR
+              startActivity(FavoritesActivity())
+              return@OnNavigationItemSelectedListener true
             }
             R.id.nav_rate -> {
-              navItemIndex = TAG_RATED
+              startActivity(RatedActivity())
+              return@OnNavigationItemSelectedListener true
             }
-            else -> navItemIndex = TAG_MOVIE
+            else -> navItemIndex = TAG_NOW
           }
           menuItem.isChecked = !menuItem.isChecked
           loadMovieFragment()
           true
         })
 
-    val actionBarDrawerToggle = object : ActionBarDrawerToggle(this, drawer_layout, toolbar,
+    val actionBarDrawerToggle = object : ActionBarDrawerToggle(this, mDrawerLayout, toolbar,
         R.string.openDrawer, R.string.closeDrawer) {
 
       override fun onDrawerClosed(drawerView: View?) {
@@ -114,12 +112,13 @@ class MainActivity : AppCompatActivity() {
         super.onDrawerOpened(drawerView)
       }
     }
-    drawer_layout.addDrawerListener(actionBarDrawerToggle)
+    mDrawerLayout.addDrawerListener(actionBarDrawerToggle)
     actionBarDrawerToggle.syncState()
   }
 
   private fun setDataProfile() {
-    imgProfile = navi_view.getHeaderView(0).findViewById(R.id.img_profile) as ImageView
+    imgProfile = mNaviView.getHeaderView(0).findViewById(R.id.img_profile) as ImageView
+    imgSearch = mNaviView.getHeaderView(0).findViewById(R.id.img_search) as ImageView
     Glide.with(this).load(getString(R.string.url_profile_temp))
         .crossFade()
         .thumbnail(sizeProfile)
@@ -128,13 +127,18 @@ class MainActivity : AppCompatActivity() {
         .into(imgProfile)
   }
 
+  private fun startActivity(activity: Activity) {
+    startActivity(Intent(this@MainActivity, activity::class.java))
+    mDrawerLayout.closeDrawers()
+  }
+
   override fun onBackPressed() {
-    if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-      drawer_layout.closeDrawers()
+    if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+      mDrawerLayout.closeDrawers()
       return
     }
-    if (mFlagOnBackPress && navItemIndex != TAG_MOVIE) {
-      navItemIndex = TAG_MOVIE
+    if (mFlagOnBackPress && navItemIndex != TAG_NOW) {
+      navItemIndex = TAG_NOW
       loadMovieFragment()
       return
     }

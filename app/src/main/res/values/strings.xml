@@ -2,6 +2,10 @@
     <string name="app_name">MovieDBTraining</string>
 
     <string name="nav_movies">Movies</string>
+    <string name="nav_now_playing">Now Playing</string>
+    <string name="nav_popular">Popular</string>
+    <string name="nav_top_rated">Top Rated</string>
+    <string name="nav_upcoming">Upcoming</string>
     <string name="nav_search">Search</string>
     <string name="nav_favo">Favorites</string>
     <string name="nav_rate">Rated</string>
@@ -12,7 +16,10 @@
     <string name="personal">Personal</string>
 
     <string-array name="nav_item_activity_titles">
-        <item>Movies</item>
+        <item>Now Playing</item>
+        <item>Popular</item>
+        <item>Top Rated</item>
+        <item>Upcoming</item>
         <item>Favorites</item>
         <item>Rated</item>
     </string-array>

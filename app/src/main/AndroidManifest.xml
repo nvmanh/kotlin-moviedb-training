@@ -19,7 +19,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".search.SearchActivity"/>
+        <activity
+            android:name=".search.SearchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".favorites.FavoritesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".rated.RatedActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

@@ -3,13 +3,17 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_movies"
-            android:title="@string/nav_movies" />
-
+            android:id="@+id/nav_now_playing"
+            android:title="@string/nav_now_playing" />
         <item
-            android:id="@+id/nav_search"
-            android:title="@string/nav_search" />
-
+            android:id="@+id/nav_popular"
+            android:title="@string/nav_popular" />
+        <item
+            android:id="@+id/nav_top_rated"
+            android:title="@string/nav_top_rated" />
+        <item
+            android:id="@+id/nav_upcoming"
+            android:title="@string/nav_upcoming" />
     </group>
 
     <item android:title="@string/personal">

@@ -1,0 +1,4 @@
+build:
+  image: fdplugins/android ## https://hub.docker.com/r/fdplugins/android/tags/
+  commands:
+    - framgia-ci run

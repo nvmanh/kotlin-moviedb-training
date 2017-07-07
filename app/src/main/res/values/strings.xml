@@ -18,6 +18,12 @@
     <string name="cancel">Cancel</string>
     <string name="no_data">No data</string>
 
+    //LoginScreen
+    <string name="str_username">Username (case sensitive)</string>
+    <string name="str_password">Password</string>
+    <string name="err_msg_username">Enter username</string>
+    <string name="err_msg_password">Enter password</string>
+
     <string-array name="nav_item_activity_titles">
         <item>Now Playing</item>
         <item>Popular</item>

@@ -4,14 +4,14 @@ test:
     ignore: false
     command: gradle :app:assembleDebug
   checkstyle:
-    ignore: false
+    ignore: true
     command: gradle :app:checkstyle
   findbugs:
-    ignore: false
+    ignore: true
     command: gradle :app:findbugs
   pmd:
-    ignore: false
+    ignore: true
     command: gradle :app:pmd
   androidlint:
-    ignore: false
+    ignore: true
     command: gradle :app:lint

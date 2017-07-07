@@ -30,14 +30,9 @@ import kotlinx.android.synthetic.main.layout_main.*
 
 class MainActivity : AppCompatActivity() {
 
-  val TAG_NOW: Int = 0
-  val TAG_POPULAR: Int = 1
-  val TAG_TOP_RATED: Int = 2
-  val TAG_UPCOMING: Int = 3
-
   private var activityTitles: Array<String>? = null
   val movieFragment: MovieFragment = MovieFragment()
-  var navItemIndex = TAG_NOW
+  var navItemIndex = Constants.TAG_NOW
   private var mHandler: Handler? = null
   private var imgProfile: ImageView? = null
   private var tvUsername: TextView? = null
@@ -58,7 +53,7 @@ class MainActivity : AppCompatActivity() {
     activityTitles = resources.getStringArray(R.array.nav_item_activity_titles)
     mHandler = Handler()
     if (savedInstanceState == null) {
-      navItemIndex = TAG_NOW
+      navItemIndex = Constants.TAG_NOW
       loadMovieFragment()
     }
   }
@@ -80,7 +75,11 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun getMoviesFragment(): Fragment {
-    return movieFragment.newinstance(navItemIndex)
+    return MovieFragment()
+  }
+
+  fun getType(): Int {
+    return navItemIndex
   }
 
   private fun setUpNavigationView() {
@@ -88,16 +87,16 @@ class MainActivity : AppCompatActivity() {
         NavigationView.OnNavigationItemSelectedListener { menuItem ->
           when (menuItem.itemId) {
             R.id.nav_now_playing -> {
-              navItemIndex = TAG_NOW
+              navItemIndex = Constants.TAG_NOW
             }
             R.id.nav_popular -> {
-              navItemIndex = TAG_POPULAR
+              navItemIndex = Constants.TAG_POPULAR
             }
             R.id.nav_top_rated -> {
-              navItemIndex = TAG_TOP_RATED
+              navItemIndex = Constants.TAG_TOP_RATED
             }
             R.id.nav_upcoming -> {
-              navItemIndex = TAG_UPCOMING
+              navItemIndex = Constants.TAG_UPCOMING
             }
             R.id.nav_favo -> {
               startActivity(FavoritesActivity())
@@ -107,7 +106,7 @@ class MainActivity : AppCompatActivity() {
               startActivity(RatedActivity())
               return@OnNavigationItemSelectedListener true
             }
-            else -> navItemIndex = TAG_NOW
+            else -> navItemIndex = Constants.TAG_NOW
           }
           menuItem.isChecked = !menuItem.isChecked
           loadMovieFragment()
@@ -181,8 +180,8 @@ class MainActivity : AppCompatActivity() {
       mDrawerLayout.closeDrawers()
       return
     }
-    if (mFlagOnBackPress && navItemIndex != TAG_NOW) {
-      navItemIndex = TAG_NOW
+    if (mFlagOnBackPress && navItemIndex != Constants.TAG_NOW) {
+      navItemIndex = Constants.TAG_NOW
       loadMovieFragment()
       return
     }

@@ -2,20 +2,13 @@ package com.framgia.moviedbtraining.movies
 
 import com.framgia.moviedbtraining.App
 import com.framgia.moviedbtraining.R
-import com.framgia.moviedbtraining.constants.Constants
 import com.framgia.moviedbtraining.model.Movie
-import com.framgia.moviedbtraining.model.MoviesResponse
-import com.framgia.moviedbtraining.rest.ApiClient
-import com.framgia.moviedbtraining.rest.ApiInterface
 import com.framgia.moviedbtraining.rest.RequestHelper
 import com.framgia.moviedbtraining.utils.GeneralUtil
 import com.framgia.moviedbtraining.widget.EndlessRecyclerOnScrollListener
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-class NowPlayingPresenter(
-    private val mViewModel: NowPlayingContractNew.ViewModel) : NowPlayingContractNew.Presenter {
+class MoviePresenter(private var type: String,
+    private val mViewModel: MovieContractNew.ViewModel) : MovieContractNew.Presenter {
 
   private var mPage: Int = 1
   private var isEmpty: Boolean = false
@@ -23,7 +16,7 @@ class NowPlayingPresenter(
   private var mMovieList: List<Movie>? = null
 
   override fun getMovies() {
-    getNowPlayingMovies(mPage)
+    getMoviesbyType(type, mPage)
   }
 
   override fun addEndlessListener() {
@@ -31,13 +24,13 @@ class NowPlayingPresenter(
     mViewModel.addEndlessListener(onLoadMoreListener!!)
   }
 
-  private fun getNowPlayingMovies(page: Int) {
+  private fun getMoviesbyType(type: String, page: Int) {
     if ((!GeneralUtil.isNetworkAvailable(App.self()))) {
       mViewModel.hideLoading()
       mViewModel.showSnack(App.self().getString(R.string.err_network))
       return
     }
-    mMovieList = RequestHelper.getNowPlaying(page, mViewModel)!!
+    mMovieList = RequestHelper.getRequesMoviesByType(type, page, mViewModel)!!
   }
 
   private fun addEndlessRecyclerOnScrollListener() {
@@ -47,7 +40,7 @@ class NowPlayingPresenter(
           return
         }
         mPage++
-        getNowPlayingMovies(mPage)
+        getMoviesbyType(type, mPage)
       }
     }
   }

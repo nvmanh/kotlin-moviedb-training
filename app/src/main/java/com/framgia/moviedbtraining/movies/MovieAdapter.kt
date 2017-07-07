@@ -12,8 +12,8 @@ import com.framgia.moviedbtraining.R
 import com.framgia.moviedbtraining.constants.Constants
 import com.framgia.moviedbtraining.model.Movie
 
-class NowPlayingAdapter(private var movies: List<Movie>,
-    private val rowLayout: Int) : RecyclerView.Adapter<NowPlayingAdapter.MovieViewHolder>() {
+class MovieAdapter(private var movies: List<Movie>,
+    private val rowLayout: Int) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
   class MovieViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     internal var imageView: ImageView = v.findViewById(R.id.imageViewPoster) as ImageView

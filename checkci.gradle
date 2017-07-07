@@ -19,7 +19,7 @@ task checkstyle(type: Checkstyle) {
 
     ignoreFailures = true
     showViolations = true
-    configFile file("${project.rootDir}/config/checkstyle/android-style.xml")
+    configFile file("${project.rootDir}/config/checkstyle/google_checks.xml")
     configProperties.checkstyleSuppressionsPath = file("${project.rootDir}/config/checkstyle/suppressions.xml")
     source 'src/main/java'
     include '**/*.java'

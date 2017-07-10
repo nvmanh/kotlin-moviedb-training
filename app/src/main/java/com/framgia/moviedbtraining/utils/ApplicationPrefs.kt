@@ -42,13 +42,13 @@ class ApplicationPrefs() {
   fun setUser(user: User) {
     val gson = Gson()
     val jsonUser = gson.toJson(user)
-    setSharedPrefs(Keys.SESSION_ID, jsonUser)
+    setSharedPrefs(Keys.USER, jsonUser)
     setIsLogin(true)
   }
 
   fun getUser(): User {
     val gson = Gson()
-    val json = getPrefData(Keys.SESSION_ID)
+    val json = getPrefData(Keys.USER)
     val jsonUser = gson.fromJson<User>(json, User::class.java)
     return jsonUser
   }

@@ -28,6 +28,7 @@
     <string name="str_register">Register</string>
     <string name="err_msg_min_password">Password (4 characters minimum)</string>
     <string name="err_web_browser">No application can handle this request.\" + \" Please install a webbrowser</string>
+    <string name="str_logout">Logout</string>
 
     <string-array name="nav_item_activity_titles">
         <item>Now Playing</item>

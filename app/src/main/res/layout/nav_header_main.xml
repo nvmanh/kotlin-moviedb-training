@@ -16,6 +16,16 @@
         android:padding="@dimen/activity_horizontal_margin"
         >
 
+        <TextView
+            android:id="@+id/tv_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textColor="@color/colorAccent"
+            android:layout_above="@+id/img_profile"
+            android:textSize="@dimen/sp_20"
+            />
+
         <ImageView
             android:id="@+id/img_profile"
             android:layout_width="@dimen/profile_width"

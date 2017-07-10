@@ -2,6 +2,7 @@ package com.framgia.moviedbtraining
 
 import android.app.Activity
 import android.content.Intent
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.NavigationView
@@ -17,15 +18,15 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.framgia.moviedbtraining.constants.Constants
 import com.framgia.moviedbtraining.usermovies.UserMoviesActivity
+import com.framgia.moviedbtraining.databinding.ActivityMainBinding
 import com.framgia.moviedbtraining.login.LoginActivity
 import com.framgia.moviedbtraining.model.User
 import com.framgia.moviedbtraining.movies.MovieFragment
 import com.framgia.moviedbtraining.profile.ProfileActivity
+import com.framgia.moviedbtraining.search.SearchActivity
 import com.framgia.moviedbtraining.utils.ApplicationPrefs
 import com.framgia.moviedbtraining.utils.CircleTransform
 import com.framgia.moviedbtraining.utils.GeneralUtil
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.layout_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,11 +44,12 @@ class MainActivity : AppCompatActivity() {
   val LOGIN_INTENT: Int = 22
   val FAVOURITES: Int = 33
   val RATED: Int = 44
+  lateinit var mBinding: ActivityMainBinding
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
-    setSupportActionBar(toolbar)
+    mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+    setSupportActionBar(mBinding.mLayoutMain.toolbar)
     setDefaultProfile()
     setUpNavigationView()
     setUpUser()
@@ -60,8 +62,8 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun loadMovieFragment() {
-    mNaviView.menu.getItem(navItemIndex).isChecked = true
-    supportActionBar!!.title = activityTitles!![navItemIndex]
+    mBinding.mNaviView.menu.getItem(navItemIndex).setChecked(true)
+    supportActionBar!!.setTitle(activityTitles!![navItemIndex])
     val mPendingRunnable = Runnable {
       val fragment = getMoviesFragment()
       val fragmentTransaction = supportFragmentManager.beginTransaction()
@@ -71,7 +73,7 @@ class MainActivity : AppCompatActivity() {
       fragmentTransaction.commitAllowingStateLoss()
     }
     mHandler!!.post(mPendingRunnable)
-    mDrawerLayout.closeDrawers()
+    mBinding.mDrawerLayout.closeDrawers()
     invalidateOptionsMenu()
   }
 
@@ -84,7 +86,7 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun setUpNavigationView() {
-    mNaviView.setNavigationItemSelectedListener(
+    mBinding.mNaviView.setNavigationItemSelectedListener(
         NavigationView.OnNavigationItemSelectedListener { menuItem ->
           when (menuItem.itemId) {
             R.id.nav_now_playing -> {
@@ -114,7 +116,8 @@ class MainActivity : AppCompatActivity() {
           true
         })
 
-    val actionBarDrawerToggle = object : ActionBarDrawerToggle(this, mDrawerLayout, toolbar,
+    val actionBarDrawerToggle = object : ActionBarDrawerToggle(this, mBinding.mDrawerLayout,
+        mBinding.mLayoutMain.toolbar,
         R.string.openDrawer, R.string.closeDrawer) {
 
       override fun onDrawerClosed(drawerView: View?) {
@@ -125,13 +128,13 @@ class MainActivity : AppCompatActivity() {
         super.onDrawerOpened(drawerView)
       }
     }
-    mDrawerLayout.addDrawerListener(actionBarDrawerToggle)
+    mBinding.mDrawerLayout.addDrawerListener(actionBarDrawerToggle)
     actionBarDrawerToggle.syncState()
   }
 
   private fun openMovieType(type: Int) {
     if (!mPref!!.getLoginStatus()) {
-      GeneralUtil.showSnackbar(mNaviView, getString(R.string.err_msg_signin))
+      GeneralUtil.showSnackbar(mBinding.mNaviView, getString(R.string.err_msg_signin))
       return
     }
     when (type) {
@@ -147,24 +150,9 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun setDefaultProfile() {
-    imgProfile = mNaviView.getHeaderView(0).findViewById(R.id.img_profile) as ImageView
-    imgSearch = mNaviView.getHeaderView(0).findViewById(R.id.img_search) as ImageView
-    tvUsername = mNaviView.getHeaderView(0).findViewById(R.id.tv_username) as TextView
-    Glide.with(this).load(getString(R.string.url_profile_temp))
-        .crossFade()
-        .thumbnail(sizeProfile)
-        .bitmapTransform(CircleTransform(this))
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .into(imgProfile)
-    tvUsername!!.text = ""
-    imgProfile!!.setOnClickListener({
-      if (mPref!!.getLoginStatus()) {
-        startActivityForResult(Intent(this@MainActivity, ProfileActivity::class.java),
-            PROFILE_INTENT)
-      } else {
-        startActivityForResult(Intent(this@MainActivity, LoginActivity::class.java), LOGIN_INTENT)
-      }
-    })
+    tvUsername = mBinding.mNaviView.getHeaderView(0).findViewById(R.id.tv_username) as TextView
+    imgProfile = mBinding.mNaviView.getHeaderView(0).findViewById(R.id.img_profile) as ImageView
+    imgSearch = mBinding.mNaviView.getHeaderView(0).findViewById(R.id.img_search) as ImageView
   }
 
   fun setUpUser() {
@@ -192,12 +180,12 @@ class MainActivity : AppCompatActivity() {
 
   private fun startActivity(activity: Activity) {
     startActivity(Intent(this@MainActivity, activity::class.java))
-    mDrawerLayout.closeDrawers()
+    mBinding.mDrawerLayout.closeDrawers()
   }
 
   override fun onBackPressed() {
-    if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-      mDrawerLayout.closeDrawers()
+    if (mBinding.mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+      mBinding.mDrawerLayout.closeDrawers()
       return
     }
     if (mFlagOnBackPress && navItemIndex != Constants.TAG_NOW) {
@@ -221,6 +209,17 @@ class MainActivity : AppCompatActivity() {
     } else {
       tvUsername!!.text = user.username
     }
+  }
+  fun onClickProfile(view: View) {
+    if (mPref!!.getLoginStatus()) {
+      startActivityForResult(Intent(this@MainActivity, ProfileActivity::class.java),
+          PROFILE_INTENT)
+    } else {
+      startActivityForResult(Intent(this@MainActivity, LoginActivity::class.java), LOGIN_INTENT)
+    }
+  }
 
+  fun onClickSearch(view: View) {
+    startActivity(SearchActivity())
   }
 }

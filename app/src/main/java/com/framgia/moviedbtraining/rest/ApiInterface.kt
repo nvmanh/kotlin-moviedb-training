@@ -27,7 +27,8 @@ interface ApiInterface {
       @Query("request_token") token: String): Call<ServiceResponse>
 
   @GET("account")
-  fun getAccount(@Query("api_key") apiKey: String, @Query("session_id") sessionId: String): Call<User>
+  fun getAccount(@Query("api_key") apiKey: String,
+      @Query("session_id") sessionId: String): Call<User>
 
   @GET("account/{account_id}/favorite/movies")
   fun getFavourites(@Query("api_key") apiKey: String, @Query("session_id") sessionId: String,
@@ -37,5 +38,10 @@ interface ApiInterface {
   @GET("account/{account_id}/rated/movies")
   fun getRated(@Query("api_key") apiKey: String, @Query("session_id") sessionId: String,
       @Query("language") language: String,
+      @Query("page") page: Int): Call<MoviesResponse>
+
+  @GET("search/movie")
+  fun getResultSearch(@Query("api_key") apiKey: String,
+      @Query("query") query: String,
       @Query("page") page: Int): Call<MoviesResponse>
 }

@@ -30,6 +30,7 @@
             android:screenOrientation="portrait" />
         <activity android:name=".profile.ProfileActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".movieDetails.MovieDetailsActivity"/>
     </application>
 
 </manifest>

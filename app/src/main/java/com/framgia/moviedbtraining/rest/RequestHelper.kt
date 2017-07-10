@@ -7,6 +7,8 @@ import com.framgia.moviedbtraining.login.LoginContract
 import com.framgia.moviedbtraining.model.Movie
 import com.framgia.moviedbtraining.model.MoviesResponse
 import com.framgia.moviedbtraining.model.ServiceResponse
+import com.framgia.moviedbtraining.constants.Keys
+import com.framgia.moviedbtraining.favorites.FavouritesContract
 import com.framgia.moviedbtraining.model.User
 import com.framgia.moviedbtraining.movies.NowPlayingContractNew
 import com.framgia.moviedbtraining.utils.ApplicationPrefs
@@ -18,7 +20,6 @@ import retrofit2.Response
  * Created by FRAMGIA\babatunde.fatoye.sunday on 7/6/17.
  */
 object RequestHelper {
-
   val mPref: ApplicationPrefs = ApplicationPrefs()
 
   fun getNowPlaying(page: Int, mViewModel: NowPlayingContractNew.ViewModel): List<Movie>? {
@@ -128,5 +129,32 @@ object RequestHelper {
         viewModel.showSnack(t.message.toString())
       }
     })
+  }
+
+  fun getFavourites(page: Int, mViewModel: FavouritesContract.ViewModel): List<Movie>? {
+    val user: User = mPref.getUser()
+    val sessionId = mPref.getPrefData(Keys.SESSION_ID)
+    mViewModel.showLoading()
+    var movieList: List<Movie>? = arrayListOf()
+    val apiService = ApiClient.client.create(ApiInterface::class.java)
+    val call = apiService.getFavourites(Constants.API_KEY, sessionId, user.language!!, page)
+    call.enqueue(object : Callback<MoviesResponse> {
+      override fun onResponse(call: Call<MoviesResponse>, response: Response<MoviesResponse>) {
+        if (response.isSuccessful) {
+          mViewModel.hideLoading()
+          movieList = response.body()!!.results
+          if (movieList!!.isEmpty()) {
+            return
+          }
+          mViewModel.showMovies(movieList!!)
+        }
+      }
+
+      override fun onFailure(call: Call<MoviesResponse>, t: Throwable) {
+        mViewModel.hideLoading()
+        mViewModel.showSnack(t.message.toString())
+      }
+    })
+    return movieList
   }
 }

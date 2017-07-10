@@ -1,12 +1,26 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:gravity="center"
     >
-    <TextView
+    <include layout="@layout/toolbar_layout"
+        android:id="@+id/toolbar"/>
+    <ProgressBar
+        android:id="@+id/pbHeaderProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/nav_favo"
-        />
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_alignParentBottom="true"
+        >
+    </ProgressBar>
 
-</LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvMovies"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:padding="@dimen/dp_10"
+        android:layout_above="@+id/pbHeaderProgress"
+        />
+</RelativeLayout>

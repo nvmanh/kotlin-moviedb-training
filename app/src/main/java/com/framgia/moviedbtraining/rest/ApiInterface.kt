@@ -28,4 +28,8 @@ interface ApiInterface {
   @GET("account")
   fun getAccount(@Query("api_key") apiKey: String, @Query("session_id") sessionId: String): Call<User>
 
+  @GET("account/{account_id}/favorite/movies")
+  fun getFavourites(@Query("api_key") apiKey: String, @Query("session_id") sessionId: String,
+      @Query("language") language: String,
+      @Query("page") page: Int): Call<MoviesResponse>
 }

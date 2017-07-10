@@ -24,6 +24,7 @@ import com.framgia.moviedbtraining.profile.ProfileActivity
 import com.framgia.moviedbtraining.rated.RatedActivity
 import com.framgia.moviedbtraining.utils.ApplicationPrefs
 import com.framgia.moviedbtraining.utils.CircleTransform
+import com.framgia.moviedbtraining.utils.GeneralUtil
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_main.*
 
@@ -64,8 +65,8 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun loadMovieFragment() {
-    mNaviView.menu.getItem(navItemIndex).setChecked(true)
-    supportActionBar!!.setTitle(activityTitles!![navItemIndex])
+    mNaviView.menu.getItem(navItemIndex).isChecked = true
+    supportActionBar!!.title = activityTitles!![navItemIndex]
     val mPendingRunnable = Runnable {
       val fragment = getMoviesFragment()
       val fragmentTransaction = supportFragmentManager.beginTransaction()
@@ -100,7 +101,11 @@ class MainActivity : AppCompatActivity() {
               navItemIndex = TAG_UPCOMING
             }
             R.id.nav_favo -> {
-              startActivity(FavoritesActivity())
+              if (!mPref!!.getLoginStatus()) {
+                GeneralUtil.showSnackbar(mNaviView, getString(R.string.err_msg_signin))
+              } else {
+                startActivity(FavoritesActivity())
+              }
               return@OnNavigationItemSelectedListener true
             }
             R.id.nav_rate -> {
@@ -169,6 +174,8 @@ class MainActivity : AppCompatActivity() {
         }
       }
     }
+    mPref = ApplicationPrefs()
+    if (!mPref!!.getLoginStatus()) return
   }
 
   private fun startActivity(activity: Activity) {

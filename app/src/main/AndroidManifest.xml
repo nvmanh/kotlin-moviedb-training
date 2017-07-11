@@ -24,10 +24,7 @@
             android:name=".search.SearchActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".favorites.FavoritesActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".rated.RatedActivity"
+            android:name=".usermovies.UserMoviesActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".login.LoginActivity"
             android:screenOrientation="portrait" />

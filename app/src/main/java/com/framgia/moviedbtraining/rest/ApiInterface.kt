@@ -33,4 +33,9 @@ interface ApiInterface {
   fun getFavourites(@Query("api_key") apiKey: String, @Query("session_id") sessionId: String,
       @Query("language") language: String,
       @Query("page") page: Int): Call<MoviesResponse>
+
+  @GET("account/{account_id}/rated/movies")
+  fun getRated(@Query("api_key") apiKey: String, @Query("session_id") sessionId: String,
+      @Query("language") language: String,
+      @Query("page") page: Int): Call<MoviesResponse>
 }

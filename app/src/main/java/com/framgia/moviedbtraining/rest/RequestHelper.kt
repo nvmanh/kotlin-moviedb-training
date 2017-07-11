@@ -12,6 +12,7 @@ import com.framgia.moviedbtraining.usermovies.UserMoviesContract
 import com.framgia.moviedbtraining.model.User
 import com.framgia.moviedbtraining.movies.MovieContractNew
 import com.framgia.moviedbtraining.utils.ApplicationPrefs
+import com.framgia.moviedbtraining.search.SearchContract
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -165,6 +166,35 @@ object RequestHelper {
       override fun onFailure(call: Call<MoviesResponse>, t: Throwable) {
         mViewModel.hideLoading()
         mViewModel.showSnack(t.message.toString())
+      }
+    })
+    return movieList
+  }
+
+  //get search result from search api
+  fun getSearchResult(text: String, page: Int,
+      mViewModel: SearchContract.ViewModel): List<Movie>? {
+    mViewModel.showLoading()
+    var movieList: List<Movie>? = arrayListOf()
+    val apiService = ApiClient.client.create(ApiInterface::class.java)
+    val call = apiService.getResultSearch(Constants.API_KEY, text, page)
+    call.enqueue(object : Callback<MoviesResponse> {
+      override fun onResponse(p0: Call<MoviesResponse>?, p1: Response<MoviesResponse>?) {
+        mViewModel.hideLoading()
+        if (p1!!.isSuccessful) {
+          movieList = p1.body()!!.results
+          if (movieList!!.isEmpty()) {
+            mViewModel.showSnack(movieList!!.size.toString())
+          }
+          mViewModel.showResult(movieList!!)
+        } else {
+          mViewModel.showSnack(movieList!!.size.toString())
+        }
+      }
+
+      override fun onFailure(p0: Call<MoviesResponse>?, p1: Throwable?) {
+        mViewModel.hideLoading()
+        mViewModel.showSnack(p1?.message.toString())
       }
     })
     return movieList

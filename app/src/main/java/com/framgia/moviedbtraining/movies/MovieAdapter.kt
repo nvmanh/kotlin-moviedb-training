@@ -1,5 +1,6 @@
 package com.framgia.moviedbtraining.movies
 
+import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import com.framgia.moviedbtraining.App
 import com.framgia.moviedbtraining.R
 import com.framgia.moviedbtraining.constants.Constants
 import com.framgia.moviedbtraining.model.Movie
+import com.framgia.moviedbtraining.movieDetails.MovieDetailsActivity
 
 class MovieAdapter(private var movies: List<Movie>,
     private val rowLayout: Int) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
@@ -30,6 +32,11 @@ class MovieAdapter(private var movies: List<Movie>,
     if (!TextUtils.isEmpty(currentMovie.posterPath))
     Glide.with(App.self()).load(Constants.WEB_URL + currentMovie.posterPath!!).into(
         holder.imageView)
+
+    holder.imageView.setOnClickListener {
+      App.self().startActivity(Intent(App.self(), MovieDetailsActivity::class.java)
+          .putExtra(Constants.EXTRA_MOVIE_ID, currentMovie.id!!))
+    }
   }
 
   override fun getItemCount(): Int {

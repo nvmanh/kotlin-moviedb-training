@@ -6,5 +6,5 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimaryDark"
     app:titleTextColor="@color/white"
-    android:fitsSystemWindows="true"
-    />
+    android:id="@+id/toolbar_details"
+    android:fitsSystemWindows="true"/>

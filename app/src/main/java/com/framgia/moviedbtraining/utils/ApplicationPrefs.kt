@@ -35,7 +35,7 @@ class ApplicationPrefs() {
     mEditor.putBoolean(Keys.IS_LOGIN, isLogin).apply()
   }
 
-  fun getLoginStatus(): Boolean {
+  fun isLogin(): Boolean {
     return getPrefBooleanData(Keys.IS_LOGIN)
   }
 

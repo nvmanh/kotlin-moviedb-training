@@ -1,6 +1,7 @@
 package com.framgia.moviedbtraining.rest
 
 import com.framgia.moviedbtraining.model.MovieDetails
+import com.framgia.moviedbtraining.model.GenresResponse
 import com.framgia.moviedbtraining.model.MoviesResponse
 import com.framgia.moviedbtraining.model.ServiceResponse
 import com.framgia.moviedbtraining.model.User
@@ -47,9 +48,14 @@ interface ApiInterface {
       @Query("page") page: Int): Call<MoviesResponse>
 
   @GET("movie/{movie_id}")
-  fun getMovieDetails(@Path("movie_id") mId:Int, @Query("api_key") apiKey: String): Call<MovieDetails>
+  fun getMovieDetails(@Path("movie_id") mId: Int,
+      @Query("api_key") apiKey: String): Call<MovieDetails>
 
   @GET("movie/{movie_id}/images")
-  fun getMovieImages(@Path("movie_id") mId:Int, @Query("api_key") apiKey: String,
+  fun getMovieImages(@Path("movie_id") mId: Int, @Query("api_key") apiKey: String,
       @Query("language") language: String): Call<MovieDetails>
+
+  @GET("genre/movie/list")
+  fun getGenres(@Query("api_key") apiKey: String,
+      @Query("language") language: String): Call<GenresResponse>
 }

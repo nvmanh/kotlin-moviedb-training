@@ -16,7 +16,8 @@ class Movie(
     var backdropPath: String?, @SerializedName("popularity")
     var popularity: Double?,
     @SerializedName("vote_count")
-    var voteCount: Int?, @SerializedName("video")
+    var voteCount: Int?, @SerializedName("rating")
+    var rating: Int?, @SerializedName("video")
     var video: Boolean?, @SerializedName("vote_average")
     var voteAverage: Double?) : Serializable {
   @SerializedName("genre_ids")

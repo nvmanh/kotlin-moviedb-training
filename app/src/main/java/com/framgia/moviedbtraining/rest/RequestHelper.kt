@@ -8,7 +8,7 @@ import com.framgia.moviedbtraining.model.Movie
 import com.framgia.moviedbtraining.model.MoviesResponse
 import com.framgia.moviedbtraining.model.ServiceResponse
 import com.framgia.moviedbtraining.constants.Keys
-import com.framgia.moviedbtraining.favorites.FavouritesContract
+import com.framgia.moviedbtraining.usermovies.UserMoviesContract
 import com.framgia.moviedbtraining.model.User
 import com.framgia.moviedbtraining.movies.MovieContractNew
 import com.framgia.moviedbtraining.utils.ApplicationPrefs
@@ -135,14 +135,22 @@ object RequestHelper {
     })
   }
 
-  fun getFavourites(page: Int, mViewModel: FavouritesContract.ViewModel): List<Movie>? {
+  fun getUserMovies(page: Int, type: String, mViewModel: UserMoviesContract.ViewModel): List<Movie>? {
     val user: User = mPref.getUser()
     val sessionId = mPref.getPrefData(Keys.SESSION_ID)
+    var call:Call<MoviesResponse>?=null
     mViewModel.showLoading()
     var movieList: List<Movie>? = arrayListOf()
     val apiService = ApiClient.client.create(ApiInterface::class.java)
-    val call = apiService.getFavourites(Constants.API_KEY, sessionId, user.language!!, page)
-    call.enqueue(object : Callback<MoviesResponse> {
+    when(type) {
+      Constants.FAVOURITE_INTENT -> {
+        call = apiService.getFavourites(Constants.API_KEY, sessionId, user.language!!, page)
+      }
+      Constants.RATING_INTENT -> {
+        call = apiService.getRated(Constants.API_KEY, sessionId, user.language!!, page)
+      }
+    }
+    call!!.enqueue(object : Callback<MoviesResponse> {
       override fun onResponse(call: Call<MoviesResponse>, response: Response<MoviesResponse>) {
         if (response.isSuccessful) {
           mViewModel.hideLoading()

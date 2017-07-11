@@ -1,10 +1,10 @@
-package com.framgia.moviedbtraining.favorites
+package com.framgia.moviedbtraining.usermovies
 
 import com.framgia.moviedbtraining.base.BaseView
 import com.framgia.moviedbtraining.model.Movie
 import com.framgia.moviedbtraining.widget.EndlessRecyclerOnScrollListener
 
-interface FavouritesContract {
+interface UserMoviesContract {
   interface ViewModel : BaseView<Presenter> {
     fun showMovies(movie: List<Movie>)
     fun showSnack(message: String)
@@ -12,7 +12,7 @@ interface FavouritesContract {
   }
 
   interface Presenter {
-    fun getMovies()
+    fun getMovies(type: String)
     fun addEndlessListener()
   }
 }

@@ -1,4 +1,4 @@
-package com.framgia.moviedbtraining.favorites
+package com.framgia.moviedbtraining.usermovies
 
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
@@ -9,10 +9,10 @@ import com.bumptech.glide.Glide
 import com.framgia.moviedbtraining.App
 import com.framgia.moviedbtraining.constants.Constants
 import com.framgia.moviedbtraining.model.Movie
-import kotlinx.android.synthetic.main.item_favourites.view.*
+import kotlinx.android.synthetic.main.item_user_movies.view.*
 
-class FavouritesAdapter(private var movies: List<Movie>,
-    private val rowLayout: Int) : RecyclerView.Adapter<FavouritesAdapter.MovieViewHolder>() {
+class UserMoviesAdapter(private var movies: List<Movie>,
+    private val rowLayout: Int) : RecyclerView.Adapter<UserMoviesAdapter.MovieViewHolder>() {
 
   class MovieViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     fun binData(movie: Movie) {
@@ -20,6 +20,10 @@ class FavouritesAdapter(private var movies: List<Movie>,
         itemView.tvName.text = movie.title
         itemView.tvDate.text = movie.releaseDate.toString()
         itemView.tvRating.text = movie.voteAverage.toString()
+        if (movie.rating != 0 && movie.rating != null) {
+          itemView.tvUserRate.visibility = View.VISIBLE
+          itemView.tvUserRate.text = movie.rating.toString()
+        }
         if (!TextUtils.isEmpty(movie.posterPath)) {
           Glide.with(App.self()).load(Constants.WEB_URL + movie.posterPath!!).into(
               itemView.ivPoster)

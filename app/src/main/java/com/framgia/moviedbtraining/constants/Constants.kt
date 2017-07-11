@@ -22,4 +22,8 @@ object Constants {
   val TAB_POPULAR = "popular"
   val TAB_RATED = "top_rated"
   val TAB_UPCOMING = "upcoming"
+
+  val TYPE = "api_type"
+  val FAVOURITE_INTENT = "fav_extra"
+  val RATING_INTENT = "rating_extra"
 }

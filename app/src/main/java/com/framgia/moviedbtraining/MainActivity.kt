@@ -16,18 +16,16 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.framgia.moviedbtraining.constants.Constants
-import com.framgia.moviedbtraining.favorites.FavoritesActivity
+import com.framgia.moviedbtraining.usermovies.UserMoviesActivity
 import com.framgia.moviedbtraining.login.LoginActivity
 import com.framgia.moviedbtraining.model.User
 import com.framgia.moviedbtraining.movies.MovieFragment
 import com.framgia.moviedbtraining.profile.ProfileActivity
-import com.framgia.moviedbtraining.rated.RatedActivity
 import com.framgia.moviedbtraining.utils.ApplicationPrefs
 import com.framgia.moviedbtraining.utils.CircleTransform
 import com.framgia.moviedbtraining.utils.GeneralUtil
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_main.*
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,6 +41,8 @@ class MainActivity : AppCompatActivity() {
   private var mPref: ApplicationPrefs? = ApplicationPrefs()
   val PROFILE_INTENT: Int = 11
   val LOGIN_INTENT: Int = 22
+  val FAVOURITES: Int = 33
+  val RATED: Int = 44
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -100,15 +100,11 @@ class MainActivity : AppCompatActivity() {
               navItemIndex = Constants.TAG_UPCOMING
             }
             R.id.nav_favo -> {
-              if (!mPref!!.getLoginStatus()) {
-                GeneralUtil.showSnackbar(mNaviView, getString(R.string.err_msg_signin))
-              } else {
-                startActivity(FavoritesActivity())
-              }
+              openMovieType(FAVOURITES)
               return@OnNavigationItemSelectedListener true
             }
             R.id.nav_rate -> {
-              startActivity(RatedActivity())
+              openMovieType(RATED)
               return@OnNavigationItemSelectedListener true
             }
             else -> navItemIndex = Constants.TAG_NOW
@@ -131,6 +127,23 @@ class MainActivity : AppCompatActivity() {
     }
     mDrawerLayout.addDrawerListener(actionBarDrawerToggle)
     actionBarDrawerToggle.syncState()
+  }
+
+  private fun openMovieType(type: Int) {
+    if (!mPref!!.getLoginStatus()) {
+      GeneralUtil.showSnackbar(mNaviView, getString(R.string.err_msg_signin))
+      return
+    }
+    when (type) {
+      FAVOURITES -> {
+        startActivity(Intent(this@MainActivity, UserMoviesActivity::class.java).putExtra(
+            Constants.TYPE, Constants.FAVOURITE_INTENT))
+      }
+      RATED -> {
+        startActivity(Intent(this@MainActivity, UserMoviesActivity::class.java).putExtra(
+            Constants.TYPE, Constants.RATING_INTENT))
+      }
+    }
   }
 
   private fun setDefaultProfile() {

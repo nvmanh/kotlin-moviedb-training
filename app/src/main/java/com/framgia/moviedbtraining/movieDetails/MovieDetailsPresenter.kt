@@ -2,6 +2,7 @@ package com.framgia.moviedbtraining.movieDetails
 
 import com.framgia.moviedbtraining.App
 import com.framgia.moviedbtraining.R
+import com.framgia.moviedbtraining.rest.RequestHelper
 import com.framgia.moviedbtraining.utils.GeneralUtil
 
 class MovieDetailsPresenter(
@@ -19,5 +20,6 @@ class MovieDetailsPresenter(
       mViewModel.showSnack(App.self().getString(R.string.err_network))
       return
     }
+    RequestHelper.getMovieDetails(movieId, mViewModel)
   }
 }

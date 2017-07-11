@@ -1,5 +1,6 @@
 package com.framgia.moviedbtraining.rest
 
+import com.framgia.moviedbtraining.model.MovieDetails
 import com.framgia.moviedbtraining.model.MoviesResponse
 import com.framgia.moviedbtraining.model.ServiceResponse
 import com.framgia.moviedbtraining.model.User
@@ -44,4 +45,11 @@ interface ApiInterface {
   fun getResultSearch(@Query("api_key") apiKey: String,
       @Query("query") query: String,
       @Query("page") page: Int): Call<MoviesResponse>
+
+  @GET("movie/{movie_id}")
+  fun getMovieDetails(@Path("movie_id") mId:Int, @Query("api_key") apiKey: String): Call<MovieDetails>
+
+  @GET("movie/{movie_id}/images")
+  fun getMovieImages(@Path("movie_id") mId:Int, @Query("api_key") apiKey: String,
+      @Query("language") language: String): Call<MovieDetails>
 }

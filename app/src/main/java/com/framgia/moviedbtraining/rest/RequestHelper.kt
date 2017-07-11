@@ -4,12 +4,10 @@ import com.framgia.moviedbtraining.App
 import com.framgia.moviedbtraining.R
 import com.framgia.moviedbtraining.constants.Constants
 import com.framgia.moviedbtraining.login.LoginContract
-import com.framgia.moviedbtraining.model.Movie
-import com.framgia.moviedbtraining.model.MoviesResponse
-import com.framgia.moviedbtraining.model.ServiceResponse
 import com.framgia.moviedbtraining.constants.Keys
+import com.framgia.moviedbtraining.model.*
 import com.framgia.moviedbtraining.usermovies.UserMoviesContract
-import com.framgia.moviedbtraining.model.User
+import com.framgia.moviedbtraining.movieDetails.MovieDetailsContract
 import com.framgia.moviedbtraining.movies.MovieContractNew
 import com.framgia.moviedbtraining.utils.ApplicationPrefs
 import com.framgia.moviedbtraining.search.SearchContract
@@ -198,5 +196,48 @@ object RequestHelper {
       }
     })
     return movieList
+  }
+
+  fun getMovieDetails(movieId: Int, mViewModel: MovieDetailsContract.ViewModel) {
+    mViewModel.showLoading()
+    var movie: MovieDetails
+    val apiService = ApiClient.client.create(ApiInterface::class.java)
+    val call = apiService.getMovieDetails(movieId, Constants.API_KEY)
+    call.enqueue(object : Callback<MovieDetails> {
+      override fun onResponse(call: Call<MovieDetails>, response: Response<MovieDetails>) {
+        if (response.isSuccessful) {
+          mViewModel.hideLoading()
+          movie = response.body()!!
+          mViewModel.showMovieDetail(movie)
+          getMoviesPosters(movieId, mViewModel)
+        }
+      }
+
+      override fun onFailure(call: Call<MovieDetails>, t: Throwable) {
+        mViewModel.hideLoading()
+        mViewModel.showSnack(t.message.toString())
+      }
+    })
+  }
+
+  fun getMoviesPosters(movieId: Int, mViewModel: MovieDetailsContract.ViewModel) {
+    mViewModel.showLoading()
+    var movie: List<MovieDetails.Posters>
+    val apiService = ApiClient.client.create(ApiInterface::class.java)
+    val call = apiService.getMovieImages(movieId, Constants.API_KEY, Constants.ENGLISH)
+    call.enqueue(object : Callback<MovieDetails> {
+      override fun onResponse(call: Call<MovieDetails>, response: Response<MovieDetails>) {
+        if (response.isSuccessful) {
+          mViewModel.hideLoading()
+          movie = response.body()!!.posters!!
+          mViewModel.showMoviePosters(movie)
+        }
+      }
+
+      override fun onFailure(call: Call<MovieDetails>, t: Throwable) {
+        mViewModel.hideLoading()
+        mViewModel.showSnack(t.message.toString())
+      }
+    })
   }
 }

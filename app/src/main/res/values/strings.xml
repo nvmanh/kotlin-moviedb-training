@@ -32,6 +32,13 @@
     <string name="err_msg_signin">Sign into your account enable this feature</string>
     <string name="str_fav_movies">Favourite Movies</string>
     <string name="str_rated_movies">Rated Movies</string>
+    <string name="str_release">Release: </string>
+    <string name="str_budget">Budget: $</string>
+    <string name="str_revenue">Revenue: $</string>
+    <string name="str_runtime">Runtime: </string>
+    <string name="str_status">Status: </string>
+    <string name="str_rating">Rating: </string>
+    <string name="str_genre">Genre</string>
 
     <string-array name="nav_item_activity_titles">
         <item>Now Playing</item>

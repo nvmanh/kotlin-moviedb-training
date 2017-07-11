@@ -25,4 +25,6 @@ object Constants {
   val RATING_INTENT = "rating_extra"
   val EXTRA_MOVIE_ID = "extra_movie_id"
   val IMAGE_EXTRA = "image_extra"
+  //Languages
+  val ENGLISH = "en"
 }

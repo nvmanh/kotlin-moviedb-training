@@ -8,7 +8,7 @@ import com.framgia.moviedbtraining.model.Movie
 import com.framgia.moviedbtraining.model.MoviesResponse
 import com.framgia.moviedbtraining.model.ServiceResponse
 import com.framgia.moviedbtraining.model.User
-import com.framgia.moviedbtraining.movies.NowPlayingContractNew
+import com.framgia.moviedbtraining.movies.MovieContractNew
 import com.framgia.moviedbtraining.utils.ApplicationPrefs
 import retrofit2.Call
 import retrofit2.Callback
@@ -21,11 +21,12 @@ object RequestHelper {
 
   val mPref: ApplicationPrefs = ApplicationPrefs()
 
-  fun getNowPlaying(page: Int, mViewModel: NowPlayingContractNew.ViewModel): List<Movie>? {
+  fun getRequesMoviesByType(type: String, page: Int,
+      mViewModel: MovieContractNew.ViewModel): List<Movie>? {
     mViewModel.showLoading()
     var movieList: List<Movie>? = arrayListOf()
     val apiService = ApiClient.client.create(ApiInterface::class.java)
-    val call = apiService.getNowPlaying(Constants.API_KEY, page)
+    val call = apiService.getMovies(type, Constants.API_KEY, page)
     call.enqueue(object : Callback<MoviesResponse> {
       override fun onResponse(call: Call<MoviesResponse>, response: Response<MoviesResponse>) {
         if (response.isSuccessful) {
@@ -35,6 +36,9 @@ object RequestHelper {
             return
           }
           mViewModel.showMovies(movieList!!)
+        } else {
+          mViewModel.hideLoading()
+          mViewModel.showSnack(response.message().toString())
         }
       }
 

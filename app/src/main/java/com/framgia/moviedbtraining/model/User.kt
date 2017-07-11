@@ -9,4 +9,11 @@ class User(
     @SerializedName("iso_639_1") var language: String?,
     @SerializedName("name") var name: String?,
     @SerializedName("include_adult") var includeAdult: Boolean?,
-    @SerializedName("username") var username: String?) : Serializable
+    @SerializedName("username") var username: String?) : Serializable {
+
+  class Avatar(
+      @SerializedName("gravatar") var gravatar: Gravatar?) : Serializable {
+    inner class Gravatar(
+        @SerializedName("hash") var hash: String?) : Serializable
+  }
+}

@@ -13,9 +13,9 @@
         />
 
     <ProgressBar
+        android:id="@+id/pbLoading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/pbLoading"
         android:layout_centerHorizontal="true"
         android:visibility="gone"
         />
@@ -24,32 +24,33 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:padding="@dimen/dp_20"
         android:orientation="vertical"
+        android:padding="@dimen/dp_20"
         >
 
         <ImageView
             android:id="@+id/moviedbLogo"
             android:layout_width="@dimen/dp_100"
             android:layout_height="@dimen/dp_100"
+            android:layout_centerHorizontal="true"
             android:layout_margin="@dimen/dp_20"
             android:background="@drawable/movie_db_logo"
-            android:layout_centerHorizontal="true"
             />
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/layoutUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/moviedbLogo">
+            android:layout_below="@+id/moviedbLogo"
+            >
 
             <EditText
                 android:id="@+id/edtUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/str_username"
-                android:padding="@dimen/dp_10"
                 android:inputType="text"
+                android:padding="@dimen/dp_10"
                 android:textColor="@color/colorWhite"
                 />
         </android.support.design.widget.TextInputLayout>
@@ -58,15 +59,16 @@
             android:id="@+id/layoutPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/layoutUsername">
+            android:layout_below="@+id/layoutUsername"
+            >
 
             <EditText
                 android:id="@+id/edtPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/str_password"
-                android:padding="@dimen/dp_10"
                 android:inputType="textPassword"
+                android:padding="@dimen/dp_10"
                 android:textColor="@color/colorWhite"
                 />
         </android.support.design.widget.TextInputLayout>
@@ -75,10 +77,10 @@
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_50"
-            android:padding="@dimen/dp_10"
-            android:hint="@string/str_login"
-            android:background="@color/colorWhite"
             android:layout_below="@+id/layoutPassword"
+            android:background="@color/colorWhite"
+            android:hint="@string/str_login"
+            android:padding="@dimen/dp_10"
             />
 
         <TextView
@@ -86,9 +88,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/btnLogin"
+            android:gravity="center"
             android:padding="@dimen/dp_10"
             android:text="@string/str_register"
-            android:gravity="center"
             android:textColor="@color/colorAccent"
             />
     </RelativeLayout>

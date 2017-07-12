@@ -16,8 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar_details"
-        android:padding="@dimen/dp_10"
         android:visibility="gone"
+        android:padding="@dimen/dp_10"
         >
 
         <ProgressBar
@@ -76,7 +76,7 @@
                             android:layout_height="@dimen/dp_150"
                             />
 
-                        <LinearLayout
+                        <RelativeLayout
                             android:id="@+id/layoutMovieLabels"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -84,36 +84,95 @@
                             >
 
                             <TextView
+                                android:id="@+id/tvReleaseDateLabel"
+                                android:text="@string/str_release"
+                                style="@style/TextView"
+                                />
+
+                            <TextView
                                 android:id="@+id/tvReleaseDate"
+                                android:layout_alignParentTop="true"
+                                android:layout_toEndOf="@+id/tvReleaseDateLabel"
+                                android:layout_toRightOf="@+id/tvReleaseDateLabel"
+                                style="@style/TextView"
+                                />
+
+                            <TextView
+                                android:id="@+id/tvBudgetLabel"
+                                android:layout_below="@id/tvReleaseDateLabel"
+                                android:text="@string/str_budget"
                                 style="@style/TextView"
                                 />
 
                             <TextView
                                 android:id="@+id/tvBudget"
+                                android:layout_below="@id/tvReleaseDateLabel"
+                                android:layout_toEndOf="@+id/tvBudgetLabel"
+                                android:layout_toRightOf="@+id/tvBudgetLabel"
+                                style="@style/TextView"
+                                />
+
+                            <TextView
+                                android:id="@+id/tvRevenueLabel"
+                                android:layout_below="@id/tvBudgetLabel"
+                                android:text="@string/str_revenue"
                                 style="@style/TextView"
                                 />
 
                             <TextView
                                 android:id="@+id/tvRevenue"
+                                android:layout_below="@id/tvBudgetLabel"
+                                android:layout_toEndOf="@+id/tvRevenueLabel"
+                                android:layout_toRightOf="@+id/tvRevenueLabel"
+                                style="@style/TextView"
+                                />
+
+                            <TextView
+                                android:id="@+id/tvRuntimeLabel"
+                                android:layout_below="@id/tvRevenueLabel"
+                                android:text="@string/str_runtime"
                                 style="@style/TextView"
                                 />
 
                             <TextView
                                 android:id="@+id/tvRuntime"
+                                android:layout_below="@id/tvRevenueLabel"
+                                android:layout_toEndOf="@+id/tvRuntimeLabel"
+                                android:layout_toRightOf="@+id/tvRuntimeLabel"
+                                style="@style/TextView"
+                                />
+
+                            <TextView
+                                android:id="@+id/tvStatusLabel"
+                                android:layout_below="@id/tvRuntimeLabel"
+                                android:text="@string/str_status"
                                 style="@style/TextView"
                                 />
 
                             <TextView
                                 android:id="@+id/tvStatus"
+                                android:layout_below="@id/tvRuntimeLabel"
+                                android:layout_toEndOf="@+id/tvStatusLabel"
+                                android:layout_toRightOf="@+id/tvStatusLabel"
+                                style="@style/TextView"
+                                />
+
+                            <TextView
+                                android:id="@+id/tvRatingLabel"
+                                android:layout_below="@id/tvStatusLabel"
+                                android:text="@string/str_rating"
                                 style="@style/TextView"
                                 />
 
                             <TextView
                                 android:id="@+id/tvRating"
-                                android:textStyle="bold"
+                                android:layout_below="@id/tvStatusLabel"
+                                android:layout_toEndOf="@+id/tvRatingLabel"
+                                android:layout_toRightOf="@+id/tvRatingLabel"
                                 style="@style/TextView"
                                 />
-                        </LinearLayout>
+
+                        </RelativeLayout>
 
                     </LinearLayout>
                 </LinearLayout>
@@ -126,23 +185,34 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp_5"
                     android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/sp_12"
                     />
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dp_10"
                 android:background="@drawable/layour_movie_bg"
                 android:padding="@dimen/dp_5"
                 >
+
+                <TextView
+                    android:id="@+id/tvGenreLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/str_genre"
+                    android:textColor="@color/colorBlack"
+                    android:textStyle="bold"
+                    />
                 <TextView
                     android:id="@+id/tvGenere"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvGenreLabel"
                     android:gravity="center"
-                    style="@style/TextView"
                     />
-            </LinearLayout>
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"

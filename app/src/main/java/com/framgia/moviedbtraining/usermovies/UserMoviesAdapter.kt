@@ -1,5 +1,6 @@
 package com.framgia.moviedbtraining.usermovies
 
+import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.framgia.moviedbtraining.App
 import com.framgia.moviedbtraining.constants.Constants
 import com.framgia.moviedbtraining.model.Movie
+import com.framgia.moviedbtraining.movieDetails.MovieDetailsActivity
 import kotlinx.android.synthetic.main.item_user_movies.view.*
 
 class UserMoviesAdapter(private var movies: List<Movie>,
@@ -28,6 +30,10 @@ class UserMoviesAdapter(private var movies: List<Movie>,
           Glide.with(App.self()).load(Constants.WEB_URL + movie.posterPath!!).into(
               itemView.ivPoster)
         }
+      }
+      itemView.layoutFavorites.setOnClickListener {
+        App.self().startActivity(Intent(App.self(), MovieDetailsActivity::class.java)
+            .putExtra(Constants.EXTRA_MOVIE_ID, movie.id!!))
       }
     }
   }

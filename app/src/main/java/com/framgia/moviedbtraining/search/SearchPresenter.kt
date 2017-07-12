@@ -15,13 +15,15 @@ class SearchPresenter(
     private val mViewModel: SearchContract.ViewModel) : SearchContract.Presenter {
   private var mPage: Int = 1
   private var mText: String = ""
+  private var mYear: String = ""
   private var isEmpty: Boolean = false
   private var onLoadMoreListener: EndlessRecyclerOnScrollListener? = null
   private var mMovieList: List<Movie>? = null
 
-  override fun getResult(text: String) {
+  override fun getResult(text: String, year: String) {
     mText = text
-    getResultMovies(mText, mPage)
+    mYear = year
+    getResultMovies(mText, mPage, mYear)
   }
 
   override fun addEndlessListener() {
@@ -36,17 +38,17 @@ class SearchPresenter(
           return
         }
         mPage++
-        getResultMovies(mText, mPage)
+        getResultMovies(mText, mPage, mYear)
       }
     }
   }
 
-  private fun getResultMovies(text: String, page: Int){
+  private fun getResultMovies(text: String, page: Int, year: String) {
     if ((!GeneralUtil.isNetworkAvailable(App.self()))) {
       mViewModel.hideLoading()
       mViewModel.showSnack(App.self().getString(R.string.err_network))
       return
     }
-    mMovieList = RequestHelper.getSearchResult(text, page, mViewModel)!!
+    mMovieList = RequestHelper.getSearchResult(text, page, year, mViewModel)!!
   }
 }

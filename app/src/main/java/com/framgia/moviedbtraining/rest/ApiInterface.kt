@@ -45,7 +45,8 @@ interface ApiInterface {
   @GET("search/movie")
   fun getResultSearch(@Query("api_key") apiKey: String,
       @Query("query") query: String,
-      @Query("page") page: Int): Call<MoviesResponse>
+      @Query("page") page: Int,
+      @Query("primary_release_year") year: String): Call<MoviesResponse>
 
   @GET("movie/{movie_id}")
   fun getMovieDetails(@Path("movie_id") mId: Int,

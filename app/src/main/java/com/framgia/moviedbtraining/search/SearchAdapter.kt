@@ -45,8 +45,10 @@ class SearchAdapter(private var movies: List<Movie>,
           itemView.tvDate.text = movie.releaseDate?.substring(0, 4)
         }
         if (!TextUtils.isEmpty(movie.posterPath)) {
-          Glide.with(App.self()).load(Constants.WEB_URL + movie.posterPath!!).into(
-              itemView.imgPoster)
+          Glide.with(App.self())
+              .load(Constants.WEB_URL + movie.posterPath!!)
+              .placeholder(R.drawable.default_movie)
+              .into(itemView.imgPoster)
         }
       }
     }

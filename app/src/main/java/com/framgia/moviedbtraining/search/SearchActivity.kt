@@ -6,12 +6,16 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import com.framgia.moviedbtraining.R
 import com.framgia.moviedbtraining.databinding.ActivitySearchBinding
 import com.framgia.moviedbtraining.model.Movie
 import com.framgia.moviedbtraining.utils.GeneralUtil
 import com.framgia.moviedbtraining.utils.SimpleTextWatcher
 import com.framgia.moviedbtraining.widget.EndlessRecyclerOnScrollListener
+import java.util.*
+
 
 /**
  * Created by FRAMGIA\pham.duc.nam on 05/07/2017.
@@ -23,6 +27,7 @@ class SearchActivity : AppCompatActivity(), SearchContract.ViewModel {
   private var mMovie: ArrayList<Movie> = arrayListOf()
   lateinit var mBinding: ActivitySearchBinding
   var mText: String = ""
+  var mYear: String = ""
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -31,6 +36,7 @@ class SearchActivity : AppCompatActivity(), SearchContract.ViewModel {
     setSupportActionBar(mBinding.toolbar)
     supportActionBar!!.setTitle(getString(R.string.nav_search))
     getText()
+    setUpSpinner()
   }
 
   private fun getText() {
@@ -38,13 +44,37 @@ class SearchActivity : AppCompatActivity(), SearchContract.ViewModel {
         SimpleWatcher(mBinding.layoutSearchResult.edtSearch))
   }
 
-  private fun getDataSearch(text: String) {
-    init(text)
+  private fun setUpSpinner() {
+    val years = ArrayList<String>()
+    val thisYear = Calendar.getInstance().get(Calendar.YEAR)
+    for (i in 1900..thisYear) {
+      years.add(Integer.toString(i))
+    }
+    years.add(0, "----")
+    val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, years)
+    mBinding.layoutSearchResult.spinYear.adapter = adapter
+    mBinding.layoutSearchResult.spinYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+      override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+        if (position == 0) {
+          mYear = ""
+        } else {
+          mYear = years.get(position)
+        }
+      }
+
+      override fun onNothingSelected(parent: AdapterView<*>) {
+
+      }
+    }
   }
 
-  fun init(text: String) {
+  private fun getDataSearch(text: String, year: String) {
+    init(text, year)
+  }
+
+  fun init(text: String, year: String) {
     mPresenter = SearchPresenter(this)
-    mPresenter.getResult(text)
+    mPresenter.getResult(text, year)
     mPresenter.addEndlessListener()
     mAdapter = SearchAdapter(mMovie, R.layout.item_search_movie)
     mBinding.layoutSearchResult.mRecyclerViewResult.apply {
@@ -70,7 +100,7 @@ class SearchActivity : AppCompatActivity(), SearchContract.ViewModel {
     } else {
       mMovie.clear()
       mBinding.layoutSearchResult.lnNoResult.visibility = View.GONE
-      getDataSearch(mText)
+      getDataSearch(mText, mYear)
     }
   }
 

@@ -3,14 +3,14 @@ package com.framgia.moviedbtraining.rest
 import com.framgia.moviedbtraining.App
 import com.framgia.moviedbtraining.R
 import com.framgia.moviedbtraining.constants.Constants
-import com.framgia.moviedbtraining.login.LoginContract
 import com.framgia.moviedbtraining.constants.Keys
+import com.framgia.moviedbtraining.login.LoginContract
 import com.framgia.moviedbtraining.model.*
-import com.framgia.moviedbtraining.usermovies.UserMoviesContract
 import com.framgia.moviedbtraining.movieDetails.MovieDetailsContract
 import com.framgia.moviedbtraining.movies.MovieContractNew
-import com.framgia.moviedbtraining.utils.ApplicationPrefs
 import com.framgia.moviedbtraining.search.SearchContract
+import com.framgia.moviedbtraining.usermovies.UserMoviesContract
+import com.framgia.moviedbtraining.utils.ApplicationPrefs
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -134,14 +134,15 @@ object RequestHelper {
     })
   }
 
-  fun getUserMovies(page: Int, type: String, mViewModel: UserMoviesContract.ViewModel): List<Movie>? {
+  fun getUserMovies(page: Int, type: String,
+      mViewModel: UserMoviesContract.ViewModel): List<Movie>? {
     val user: User = mPref.getUser()
     val sessionId = mPref.getPrefData(Keys.SESSION_ID)
-    var call:Call<MoviesResponse>?=null
+    var call: Call<MoviesResponse>? = null
     mViewModel.showLoading()
     var movieList: List<Movie>? = arrayListOf()
     val apiService = ApiClient.client.create(ApiInterface::class.java)
-    when(type) {
+    when (type) {
       Constants.FAVOURITE_INTENT -> {
         call = apiService.getFavourites(Constants.API_KEY, sessionId, user.language!!, page)
       }
@@ -239,5 +240,26 @@ object RequestHelper {
         mViewModel.showSnack(t.message.toString())
       }
     })
+  }
+
+  fun getGenres(): List<Genres>? {
+    val user: User = mPref.getUser()
+    var genresList: List<Genres>? = arrayListOf()
+    val apiService = ApiClient.client.create(ApiInterface::class.java)
+    val call = apiService.getGenres(Constants.API_KEY, user.language!!)
+    call.enqueue(object : Callback<GenresResponse> {
+      override fun onResponse(call: Call<GenresResponse>, response: Response<GenresResponse>) {
+        if (response.isSuccessful) {
+          genresList = response.body()!!.genres
+          if (genresList!!.isEmpty()) {
+            return
+          }
+        }
+      }
+
+      override fun onFailure(call: Call<GenresResponse>, t: Throwable) {
+      }
+    })
+    return genresList
   }
 }

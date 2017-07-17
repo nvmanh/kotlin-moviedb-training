@@ -262,4 +262,48 @@ object RequestHelper {
     })
     return genresList
   }
+
+  fun rateMovie(movieId: Int, rate: Number,  mViewModel: MovieDetailsContract.ViewModel) {
+    mViewModel.showLoading()
+    val sessionId = mPref.getPrefData(Keys.SESSION_ID)
+    val apiService = ApiClient.client.create(ApiInterface::class.java)
+    val call = apiService.rateMovie(movieId, Constants.API_KEY, sessionId, rate)
+    call.enqueue(object : Callback<MoviesResponse> {
+      override fun onResponse(call: Call<MoviesResponse>, response: Response<MoviesResponse>) {
+        if (response.isSuccessful) {
+          mViewModel.hideLoading()
+          mViewModel.showSnack(response.body()!!.statusMessage)
+        } else {
+          mViewModel.showSnack(App.self().getString(R.string.err_occur))
+        }
+      }
+
+      override fun onFailure(call: Call<MoviesResponse>, t: Throwable) {
+        mViewModel.hideLoading()
+        mViewModel.showSnack(t.message.toString())
+      }
+    })
+  }
+
+  fun deleteRatedMovie(movieId: Int, mViewModel: MovieDetailsContract.ViewModel) {
+    mViewModel.showLoading()
+    val sessionId = mPref.getPrefData(Keys.SESSION_ID)
+    val apiService = ApiClient.client.create(ApiInterface::class.java)
+    val call = apiService.deleteRatedMovie(movieId, Constants.API_KEY, sessionId)
+    call.enqueue(object : Callback<MoviesResponse> {
+      override fun onResponse(call: Call<MoviesResponse>, response: Response<MoviesResponse>) {
+        if (response.isSuccessful) {
+          mViewModel.hideLoading()
+          mViewModel.showSnack(response.body()!!.statusMessage)
+        } else {
+          mViewModel.showSnack(App.self().getString(R.string.err_occur))
+        }
+      }
+
+      override fun onFailure(call: Call<MoviesResponse>, t: Throwable) {
+        mViewModel.hideLoading()
+        mViewModel.showSnack(t.message.toString())
+      }
+    })
+  }
 }

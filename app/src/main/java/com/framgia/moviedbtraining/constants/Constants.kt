@@ -27,4 +27,5 @@ object Constants {
   val IMAGE_EXTRA = "image_extra"
   //Languages
   val ENGLISH = "en"
+  val  USER_RATING = "user_rating"
 }

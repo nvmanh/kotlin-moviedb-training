@@ -26,6 +26,17 @@
         <item name="android:visibility">gone</item>
     </style>
 
+    //RatingBar style
+    <style name="MyRatingBar" parent="@android:style/Widget.DeviceDefault.RatingBar.Indicator">
+        <item name="android:minHeight">48dp</item>
+        <item name="android:maxHeight">48dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:numStars">10</item>
+        <item name="android:isIndicator">false</item>
+    </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

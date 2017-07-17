@@ -1,14 +1,8 @@
 package com.framgia.moviedbtraining.rest
 
-import com.framgia.moviedbtraining.model.MovieDetails
-import com.framgia.moviedbtraining.model.GenresResponse
-import com.framgia.moviedbtraining.model.MoviesResponse
-import com.framgia.moviedbtraining.model.ServiceResponse
-import com.framgia.moviedbtraining.model.User
+import com.framgia.moviedbtraining.model.*
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface ApiInterface {
 
@@ -59,4 +53,15 @@ interface ApiInterface {
   @GET("genre/movie/list")
   fun getGenres(@Query("api_key") apiKey: String,
       @Query("language") language: String): Call<GenresResponse>
+
+  @Headers("Content-type: application/json")
+  @POST("movie/{movie_id}/rating")
+  fun rateMovie(@Path("movie_id") movieId: Int, @Query("api_key") apiKey: String,
+      @Query("session_id") sessionId: String,
+      @Query("value") rateValue: Number): Call<MoviesResponse>
+
+  @Headers("Content-type: application/json")
+  @DELETE("movie/{movie_id}/rating")
+  fun deleteRatedMovie(@Path("movie_id") movieId: Int, @Query("api_key") apiKey: String,
+      @Query("session_id") sessionId: String): Call<MoviesResponse>
 }

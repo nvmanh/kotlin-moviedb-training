@@ -19,11 +19,12 @@ class UserMoviesActivity : AppCompatActivity(), UserMoviesContract.ViewModel {
   private var mMovie: ArrayList<Movie> = arrayListOf()
   private lateinit var mIntent: Intent
   private var mType = ""
+  lateinit var mPresenter: UserMoviesPresenter
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_user_movies)
     getExtras()
-    init()
     setToolbar()
   }
 
@@ -33,7 +34,8 @@ class UserMoviesActivity : AppCompatActivity(), UserMoviesContract.ViewModel {
   }
 
   fun init() {
-    val mPresenter: UserMoviesPresenter = UserMoviesPresenter(this)
+    mMovie.clear()
+    mPresenter = UserMoviesPresenter(this)
     mPresenter.getMovies(mType)
     mPresenter.addEndlessListener()
     mAdapter = UserMoviesAdapter(mMovie, R.layout.item_user_movies)
@@ -75,5 +77,10 @@ class UserMoviesActivity : AppCompatActivity(), UserMoviesContract.ViewModel {
 
   override fun showSnack(message: String) {
     GeneralUtil.showSnackbar(rvMovies, message)
+  }
+
+  override fun onResume() {
+    super.onResume()
+    init()
   }
 }

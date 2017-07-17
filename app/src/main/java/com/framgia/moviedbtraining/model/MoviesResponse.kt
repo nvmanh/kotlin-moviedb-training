@@ -11,4 +11,6 @@ class MoviesResponse {
   var totalResults: Int = 0
   @SerializedName("total_pages")
   var totalPages: Int = 0
+  @SerializedName("status_message")
+  var statusMessage: String = ""
 }

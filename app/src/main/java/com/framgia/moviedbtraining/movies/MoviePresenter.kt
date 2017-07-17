@@ -25,7 +25,7 @@ class MoviePresenter(private var type: String,
   }
 
   private fun getMoviesbyType(type: String, page: Int) {
-    if ((!GeneralUtil.isNetworkAvailable(App.self()))) {
+    if ((!GeneralUtil.isNetworkAvailable())) {
       mViewModel.hideLoading()
       mViewModel.showSnack(App.self().getString(R.string.err_network))
       return

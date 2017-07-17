@@ -18,7 +18,7 @@ class UserMoviesPresenter(
 
   override fun getMovies(type:String) {
     mType = type
-    getUserMovies(mPage, mType)
+    getUserMovies(mPage)
   }
 
   override fun addEndlessListener() {
@@ -26,8 +26,8 @@ class UserMoviesPresenter(
     mViewModel.addEndlessListener(onLoadMoreListener!!)
   }
 
-  private fun getUserMovies(page: Int, type: String) {
-    if ((!GeneralUtil.isNetworkAvailable(App.self()))) {
+  private fun getUserMovies(page: Int) {
+    if ((!GeneralUtil.isNetworkAvailable())) {
       mViewModel.hideLoading()
       mViewModel.showSnack(App.self().getString(R.string.err_network))
       return
@@ -42,7 +42,7 @@ class UserMoviesPresenter(
           return
         }
         mPage++
-        getUserMovies(mPage, mType)
+        getUserMovies(mPage)
       }
     }
   }

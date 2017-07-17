@@ -1,6 +1,5 @@
 package com.framgia.moviedbtraining.usermovies
 
-import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.LayoutInflater
@@ -22,9 +21,9 @@ class UserMoviesAdapter(private var movies: List<Movie>,
         itemView.tvName.text = movie.title
         itemView.tvDate.text = movie.releaseDate.toString()
         itemView.tvRating.text = movie.voteAverage.toString()
-        if (movie.rating != 0 && movie.rating != null) {
+        if (movie.rating != null) {
           itemView.tvUserRate.visibility = View.VISIBLE
-          itemView.tvUserRate.text = movie.rating.toString()
+          itemView.tvUserRate.text = movie.rating!!.toInt().toString()
         }
         if (!TextUtils.isEmpty(movie.posterPath)) {
           Glide.with(App.self()).load(Constants.WEB_URL + movie.posterPath!!).into(
@@ -32,8 +31,7 @@ class UserMoviesAdapter(private var movies: List<Movie>,
         }
       }
       itemView.layoutFavorites.setOnClickListener {
-        App.self().startActivity(Intent(App.self(), MovieDetailsActivity::class.java)
-            .putExtra(Constants.EXTRA_MOVIE_ID, movie.id!!))
+        MovieDetailsActivity.UserMoviesIntent(movie)
       }
     }
   }

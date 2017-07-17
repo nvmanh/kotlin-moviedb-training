@@ -42,6 +42,10 @@
     <string name="str_genre">Genre</string>
     <string name="nav_logout">Logout</string>
     <string name="msg_logout">Logout Account?</string>
+    <string name="str_cancel">CANCEL</string>
+    <string name="str_rate">RATE</string>
+    <string name="err_occur">Error occured, please try again later.</string>
+    <string name="str_rate_icon">R</string>
 
     <string-array name="nav_item_activity_titles">
         <item>Now Playing</item>

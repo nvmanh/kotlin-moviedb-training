@@ -44,7 +44,7 @@ class SearchPresenter(
   }
 
   private fun getResultMovies(text: String, page: Int, year: String) {
-    if ((!GeneralUtil.isNetworkAvailable(App.self()))) {
+    if ((!GeneralUtil.isNetworkAvailable())) {
       mViewModel.hideLoading()
       mViewModel.showSnack(App.self().getString(R.string.err_network))
       return

@@ -32,6 +32,7 @@
         <activity android:name=".profile.ProfileActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".movieDetails.MovieDetailsActivity"/>
+        <activity android:name=".full.ImageFullActivity"/>
     </application>
 
 </manifest>

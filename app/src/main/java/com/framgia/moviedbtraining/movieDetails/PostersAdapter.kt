@@ -11,6 +11,7 @@ import com.framgia.moviedbtraining.constants.Constants
 import com.framgia.moviedbtraining.model.MovieDetails
 import kotlinx.android.synthetic.main.item_posters.view.*
 
+
 class PostersAdapter(private var movies: List<MovieDetails.Posters>,
     private val rowLayout: Int) : RecyclerView.Adapter<PostersAdapter.MovieViewHolder>() {
 
@@ -21,6 +22,9 @@ class PostersAdapter(private var movies: List<MovieDetails.Posters>,
           Glide.with(App.self()).load(Constants.WEB_URL + movie.filePath).into(
               itemView.imageViewPoster)
         }
+      }
+      itemView.imageViewPoster.setOnClickListener {
+        MovieDetailsActivity.MovieDetailIntent(movie)
       }
     }
   }

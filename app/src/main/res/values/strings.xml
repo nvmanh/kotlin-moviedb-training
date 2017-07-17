@@ -39,6 +39,8 @@
     <string name="str_status">Status: </string>
     <string name="str_rating">Rating: </string>
     <string name="str_genre">Genre</string>
+    <string name="nav_logout">Logout</string>
+    <string name="msg_logout">Logout Account?</string>
 
     <string-array name="nav_item_activity_titles">
         <item>Now Playing</item>

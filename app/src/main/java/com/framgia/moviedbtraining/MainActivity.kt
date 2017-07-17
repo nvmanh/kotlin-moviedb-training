@@ -2,6 +2,7 @@ package com.framgia.moviedbtraining
 
 import android.app.Activity
 import android.content.Intent
+import android.content.SharedPreferences
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.os.Handler
@@ -17,21 +18,21 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.framgia.moviedbtraining.constants.Constants
-import com.framgia.moviedbtraining.usermovies.UserMoviesActivity
+import com.framgia.moviedbtraining.constants.Keys
 import com.framgia.moviedbtraining.databinding.ActivityMainBinding
-import com.framgia.moviedbtraining.login.LoginActivity
 import com.framgia.moviedbtraining.model.User
 import com.framgia.moviedbtraining.movies.MovieFragment
 import com.framgia.moviedbtraining.profile.ProfileActivity
 import com.framgia.moviedbtraining.search.SearchActivity
+import com.framgia.moviedbtraining.usermovies.UserMoviesActivity
 import com.framgia.moviedbtraining.utils.ApplicationPrefs
 import com.framgia.moviedbtraining.utils.CircleTransform
 import com.framgia.moviedbtraining.utils.GeneralUtil
 
+
 class MainActivity : AppCompatActivity() {
 
   private var activityTitles: Array<String>? = null
-  val movieFragment: MovieFragment = MovieFragment()
   var navItemIndex = Constants.TAG_NOW
   private var mHandler: Handler? = null
   private var imgProfile: ImageView? = null
@@ -40,8 +41,6 @@ class MainActivity : AppCompatActivity() {
   private val mFlagOnBackPress = true
   private val sizeProfile: Float = 0.5f
   private var mPref: ApplicationPrefs? = ApplicationPrefs()
-  val PROFILE_INTENT: Int = 11
-  val LOGIN_INTENT: Int = 22
   val FAVOURITES: Int = 33
   val RATED: Int = 44
   lateinit var mBinding: ActivityMainBinding
@@ -63,7 +62,7 @@ class MainActivity : AppCompatActivity() {
 
   private fun loadMovieFragment() {
     mBinding.mNaviView.menu.getItem(navItemIndex).setChecked(true)
-    supportActionBar!!.setTitle(activityTitles!![navItemIndex])
+    supportActionBar!!.title = activityTitles!![navItemIndex]
     val mPendingRunnable = Runnable {
       val fragment = getMoviesFragment()
       val fragmentTransaction = supportFragmentManager.beginTransaction()
@@ -109,6 +108,10 @@ class MainActivity : AppCompatActivity() {
               openMovieType(RATED)
               return@OnNavigationItemSelectedListener true
             }
+            R.id.nav_logout -> {
+              logout()
+              return@OnNavigationItemSelectedListener true
+            }
             else -> navItemIndex = Constants.TAG_NOW
           }
           menuItem.isChecked = !menuItem.isChecked
@@ -133,7 +136,7 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun openMovieType(type: Int) {
-    if (!mPref!!.getLoginStatus()) {
+    if (!mPref!!.isLogin()) {
       GeneralUtil.showSnackbar(mBinding.mNaviView, getString(R.string.err_msg_signin))
       return
     }
@@ -156,26 +159,9 @@ class MainActivity : AppCompatActivity() {
   }
 
   fun setUpUser() {
-    if (!mPref!!.getLoginStatus()) return
+    if (!mPref!!.isLogin()) return
     var user: User = mPref!!.getUser()
     loadUserDetails(user)
-  }
-
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-    super.onActivityResult(requestCode, resultCode, data)
-    if (resultCode == Activity.RESULT_OK) {
-      when (requestCode) {
-        LOGIN_INTENT -> {
-          val user: User = mPref!!.getUser()
-          loadUserDetails(user)
-        }
-        PROFILE_INTENT -> {
-          setDefaultProfile()
-        }
-      }
-    }
-    mPref = ApplicationPrefs()
-    if (!mPref!!.getLoginStatus()) return
   }
 
   private fun startActivity(activity: Activity) {
@@ -210,16 +196,21 @@ class MainActivity : AppCompatActivity() {
       tvUsername!!.text = user.username
     }
   }
+
   fun onClickProfile(view: View) {
-    if (mPref!!.getLoginStatus()) {
-      startActivityForResult(Intent(this@MainActivity, ProfileActivity::class.java),
-          PROFILE_INTENT)
-    } else {
-      startActivityForResult(Intent(this@MainActivity, LoginActivity::class.java), LOGIN_INTENT)
+    if (mPref!!.isLogin()) {
+      startActivity(Intent(this@MainActivity, ProfileActivity::class.java))
+      finish()
     }
   }
 
   fun onClickSearch(view: View) {
     startActivity(SearchActivity())
+  }
+
+  fun logout() {
+    val preferences: SharedPreferences = App.self().getSharedPreferences(Keys.APPLICATION_PREFS, 0)
+    preferences.edit().clear().apply()
+    finish()
   }
 }

@@ -8,18 +8,18 @@ import android.os.Bundle
 import android.text.Editable
 import android.view.View
 import android.view.WindowManager
+import com.framgia.moviedbtraining.MainActivity
 import com.framgia.moviedbtraining.R
 import com.framgia.moviedbtraining.constants.Constants
 import com.framgia.moviedbtraining.model.User
+import com.framgia.moviedbtraining.utils.ApplicationPrefs
 import com.framgia.moviedbtraining.utils.GeneralUtil
 import com.framgia.moviedbtraining.utils.SimpleTextWatcher
 import kotlinx.android.synthetic.main.activity_login.*
 
-
 class LoginActivity : Activity(), LoginContract.ViewModel {
   override fun userData(user: User) {
-    val returnIntent = intent
-    setResult(Activity.RESULT_OK, returnIntent)
+    startActivity(Intent(this, MainActivity::class.java))
     finish()
   }
 
@@ -48,6 +48,11 @@ class LoginActivity : Activity(), LoginContract.ViewModel {
   }
 
   fun init() {
+    val mPref: ApplicationPrefs = ApplicationPrefs()
+    if (mPref.isLogin()) {
+      startActivity(Intent(this, MainActivity::class.java))
+      finish()
+    }
     edtUsername.addTextChangedListener(SimpleWatcher(edtUsername))
     edtPassword.addTextChangedListener(SimpleWatcher(edtPassword))
     btnLogin.setOnClickListener({ doLogin() })

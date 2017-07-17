@@ -16,7 +16,7 @@ interface SearchContract {
   }
 
   interface Presenter {
-    fun getResult(text: String)
+    fun getResult(text: String, year: String)
     fun addEndlessListener()
   }
 }

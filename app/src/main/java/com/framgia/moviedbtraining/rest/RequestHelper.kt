@@ -171,12 +171,12 @@ object RequestHelper {
   }
 
   //get search result from search api
-  fun getSearchResult(text: String, page: Int,
+  fun getSearchResult(text: String, page: Int, year: String,
       mViewModel: SearchContract.ViewModel): List<Movie>? {
     mViewModel.showLoading()
     var movieList: List<Movie>? = arrayListOf()
     val apiService = ApiClient.client.create(ApiInterface::class.java)
-    val call = apiService.getResultSearch(Constants.API_KEY, text, page)
+    val call = apiService.getResultSearch(Constants.API_KEY, text, page, year)
     call.enqueue(object : Callback<MoviesResponse> {
       override fun onResponse(p0: Call<MoviesResponse>?, p1: Response<MoviesResponse>?) {
         mViewModel.hideLoading()

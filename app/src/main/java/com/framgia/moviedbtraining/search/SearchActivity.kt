@@ -10,10 +10,12 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.framgia.moviedbtraining.R
 import com.framgia.moviedbtraining.databinding.ActivitySearchBinding
+import com.framgia.moviedbtraining.db.DatabaseHelper
 import com.framgia.moviedbtraining.model.Movie
 import com.framgia.moviedbtraining.utils.GeneralUtil
 import com.framgia.moviedbtraining.utils.SimpleTextWatcher
 import com.framgia.moviedbtraining.widget.EndlessRecyclerOnScrollListener
+import com.j256.ormlite.android.apptools.OpenHelperManager
 import java.util.*
 
 
@@ -26,6 +28,7 @@ class SearchActivity : AppCompatActivity(), SearchContract.ViewModel {
   private var mAdapter: SearchAdapter? = null
   private var mMovie: ArrayList<Movie> = arrayListOf()
   lateinit var mBinding: ActivitySearchBinding
+  private var mDatabaseHelper: DatabaseHelper? = null
   var mText: String = ""
   var mYear: String = ""
 
@@ -136,6 +139,21 @@ class SearchActivity : AppCompatActivity(), SearchContract.ViewModel {
       } else {
         mBinding.layoutSearchResult.tvRight.text = getString(R.string.nav_search)
       }
+    }
+  }
+
+  private fun getHelper(): DatabaseHelper {
+    if (mDatabaseHelper == null) {
+      mDatabaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper::class.java)
+    }
+    return mDatabaseHelper!!
+  }
+
+  override fun onDestroy() {
+    super.onDestroy()
+    if (mDatabaseHelper != null) {
+      OpenHelperManager.releaseHelper();
+      mDatabaseHelper = null;
     }
   }
 }

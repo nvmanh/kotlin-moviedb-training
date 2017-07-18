@@ -11,23 +11,23 @@
         android:id="@+id/toolbar_details"
         />
 
+    <ProgressBar
+        android:id="@+id/pbHeaderProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        />
+
     <RelativeLayout
         android:id="@+id/rlLayoutAll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/toolbar_details"
-        android:visibility="gone"
         android:padding="@dimen/dp_10"
+        android:visibility="gone"
         >
-
-        <ProgressBar
-            android:id="@+id/pbHeaderProgress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -23,6 +23,8 @@ import com.framgia.moviedbtraining.App
 import com.framgia.moviedbtraining.R
 import com.framgia.moviedbtraining.constants.Constants
 import com.framgia.moviedbtraining.model.Movie
+import com.framgia.moviedbtraining.full.ImageFullActivity
+import com.framgia.moviedbtraining.full.ImageFullActivity.Companion.MovieDetailsIntent
 import com.framgia.moviedbtraining.model.MovieDetails
 import com.framgia.moviedbtraining.usermovies.UserMoviesActivity.Companion.MovieSimilarIntent
 import com.framgia.moviedbtraining.utils.ApplicationPrefs
@@ -52,6 +54,7 @@ class MovieDetailsActivity : AppCompatActivity(), MovieDetailsContract.ViewModel
     mPresenter = MovieDetailsPresenter(this, mId)
     mPresenter.getMovieDetails()
     tvUserRate.setOnClickListener { showRateDialog() }
+    ivPoster.setOnClickListener { openImageFullScreen() }
   }
 
   fun getExtras() {
@@ -182,7 +185,16 @@ class MovieDetailsActivity : AppCompatActivity(), MovieDetailsContract.ViewModel
     dialog.show()
   }
 
+  fun openImageFullScreen() {
+    startActivity(MovieDetailsIntent(mMovie))
+  }
+
   companion object {
+    fun MovieDetailIntent(movie: MovieDetails.Posters) {
+      App.self().startActivity(Intent(App.self(), ImageFullActivity::class.java)
+          .putExtra(Constants.IMAGE_EXTRA, Constants.WEB_URL + movie.filePath))
+    }
+
     fun UserMoviesIntent(movie: Movie) {
       val intent = Intent(App.self(), MovieDetailsActivity::class.java)
       intent.putExtra(Constants.EXTRA_MOVIE_ID, movie.id!!)

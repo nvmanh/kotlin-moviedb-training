@@ -5,16 +5,17 @@ import android.support.design.widget.Snackbar
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import com.framgia.moviedbtraining.App
 
 object GeneralUtil {
 
-  fun checkInternet(context: Context): Boolean {
-    val cd = ConnectionDetector(context)
+  fun checkInternet(): Boolean {
+    val cd = ConnectionDetector(App.self())
     return cd.isConnectingToInternet
   }
 
-  fun isNetworkAvailable(context: Context): Boolean {
-    return GeneralUtil.checkInternet(context)
+  fun isNetworkAvailable(): Boolean {
+    return GeneralUtil.checkInternet()
   }
 
   fun showSnackbar(view: View, message: String) {

@@ -9,7 +9,7 @@ class LoginPresenter(
     private val mViewModel: LoginContract.ViewModel) : LoginContract.Presenter {
 
   override fun doLogin(username: String, password: String) {
-    if ((!GeneralUtil.isNetworkAvailable(App.self()))) {
+    if ((!GeneralUtil.isNetworkAvailable())) {
       mViewModel.hideLoading()
       mViewModel.showSnack(App.self().getString(R.string.err_network))
       return

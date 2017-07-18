@@ -212,6 +212,20 @@
                     android:layout_below="@+id/tvGenreLabel"
                     android:gravity="center"
                     />
+
+                <TextView
+                    android:id="@+id/tvUserRate"
+                    android:layout_width="@dimen/dp_30"
+                    android:layout_height="@dimen/dp_30"
+                    android:background="@color/colorPrimary"
+                    android:textColor="@color/white"
+                    android:layout_margin="@dimen/dp_2"
+                    android:text="@string/str_rate_icon"
+                    android:layout_alignEnd="@+id/tvGenere"
+                    android:layout_alignRight="@+id/tvGenere"
+                    android:layout_below="@+id/tvGenreLabel"
+                    android:gravity="center"
+                    android:textStyle="bold"/>
             </RelativeLayout>
 
             <LinearLayout

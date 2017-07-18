@@ -12,5 +12,7 @@ interface MovieDetailsContract {
 
   interface Presenter {
     fun getMovieDetails()
+    fun  rateMovie(mId: Int, toFloat: Float)
+    fun  deleteRatedMovie(mId: Int)
   }
 }

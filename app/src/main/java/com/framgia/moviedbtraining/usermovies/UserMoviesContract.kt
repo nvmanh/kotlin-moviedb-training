@@ -12,7 +12,7 @@ interface UserMoviesContract {
   }
 
   interface Presenter {
-    fun getMovies(type: String)
+    fun getMovies(type: String, movieId: Int)
     fun addEndlessListener()
   }
 }

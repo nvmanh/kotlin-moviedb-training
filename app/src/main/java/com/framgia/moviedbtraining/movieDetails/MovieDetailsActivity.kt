@@ -9,7 +9,10 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.Toolbar
 import android.text.TextUtils
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.RatingBar
 import android.widget.TextView
@@ -21,6 +24,8 @@ import com.framgia.moviedbtraining.R
 import com.framgia.moviedbtraining.constants.Constants
 import com.framgia.moviedbtraining.model.Movie
 import com.framgia.moviedbtraining.model.MovieDetails
+import com.framgia.moviedbtraining.usermovies.UserMoviesActivity.Companion.MovieSimilarIntent
+import com.framgia.moviedbtraining.utils.ApplicationPrefs
 import com.framgia.moviedbtraining.utils.GeneralUtil
 import kotlinx.android.synthetic.main.activity_movie_details.*
 import java.util.*
@@ -32,6 +37,7 @@ class MovieDetailsActivity : AppCompatActivity(), MovieDetailsContract.ViewModel
   private var mId: Int = 0
   private var mRating: Int = 0
   lateinit var mMovie: MovieDetails
+  private lateinit var mToolbar: Toolbar
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -41,6 +47,8 @@ class MovieDetailsActivity : AppCompatActivity(), MovieDetailsContract.ViewModel
   }
 
   fun init() {
+    mToolbar = findViewById(R.id.toolbar_details) as Toolbar
+    setSupportActionBar(mToolbar)
     mPresenter = MovieDetailsPresenter(this, mId)
     mPresenter.getMovieDetails()
     tvUserRate.setOnClickListener { showRateDialog() }
@@ -75,6 +83,29 @@ class MovieDetailsActivity : AppCompatActivity(), MovieDetailsContract.ViewModel
     rvMovieImages.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true)
     rvMovieImages.adapter = mAdapter
   }
+
+  override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    when (item.itemId) {
+      android.R.id.home -> finish()
+      R.id.action_similar -> {
+        val mPref = ApplicationPrefs()
+        if (!mPref.isLogin()) {
+          GeneralUtil.showSnackbar(pbHeaderProgress, getString(R.string.err_msg_signin))
+          return false
+        }
+        startActivity(MovieSimilarIntent(mMovie.id))
+      }
+      else -> {
+      }
+    }
+    return super.onOptionsItemSelected(item)
+  }
+
+  override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    menuInflater.inflate(R.menu.menu_movie_details, menu)
+    return true
+  }
+
 
   fun setMovie() {
     tvName.text = mMovie.title
@@ -139,7 +170,7 @@ class MovieDetailsActivity : AppCompatActivity(), MovieDetailsContract.ViewModel
     }
     btnRate.setOnClickListener {
       if (ratingBar.rating == mRating.toFloat()) return@setOnClickListener
-      if (ratingBar.rating==0f) {
+      if (ratingBar.rating == 0f) {
         mPresenter.deleteRatedMovie(mId)
       } else {
         mPresenter.rateMovie(mId, ratingBar.rating)

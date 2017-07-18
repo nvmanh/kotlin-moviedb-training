@@ -1,5 +1,6 @@
 package com.framgia.moviedbtraining.usermovies
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -17,9 +18,9 @@ import kotlinx.android.synthetic.main.activity_user_movies.*
 class UserMoviesActivity : AppCompatActivity(), UserMoviesContract.ViewModel {
   private var mAdapter: UserMoviesAdapter? = null
   private var mMovie: ArrayList<Movie> = arrayListOf()
-  private lateinit var mIntent: Intent
   private var mType = ""
   lateinit var mPresenter: UserMoviesPresenter
+  private var mMovieId = 0
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -29,14 +30,16 @@ class UserMoviesActivity : AppCompatActivity(), UserMoviesContract.ViewModel {
   }
 
   fun getExtras() {
-    mIntent = this.intent
-    mType = mIntent.getStringExtra(Constants.TYPE)
+    mType = intent.getStringExtra(TYPE)
+    mMovieId = intent.getIntExtra(EXTRA_MOVIE_ID, 0)
   }
 
   fun init() {
     mMovie.clear()
     mPresenter = UserMoviesPresenter(this)
-    mPresenter.getMovies(mType)
+    mPresenter.getMovies(mType, mMovieId)
+    val mPresenter: UserMoviesPresenter = UserMoviesPresenter(this)
+    mPresenter.getMovies(mType, mMovieId)
     mPresenter.addEndlessListener()
     mAdapter = UserMoviesAdapter(mMovie, R.layout.item_user_movies)
     rvMovies.layoutManager = LinearLayoutManager(
@@ -54,6 +57,9 @@ class UserMoviesActivity : AppCompatActivity(), UserMoviesContract.ViewModel {
       }
       Constants.RATING_INTENT -> {
         supportActionBar!!.title = getString(R.string.str_rated_movies)
+      }
+      Constants.SIMLAR_INTENT -> {
+        supportActionBar!!.title = getString(R.string.str_similar_movies)
       }
     }
   }
@@ -82,5 +88,16 @@ class UserMoviesActivity : AppCompatActivity(), UserMoviesContract.ViewModel {
   override fun onResume() {
     super.onResume()
     init()
+  }
+
+  companion object {
+    private const val TYPE = "api_type"
+    private const val EXTRA_MOVIE_ID = "extra_movie_id"
+    private const val SIMLAR_INTENT = "similar_extra"
+    fun Context.MovieSimilarIntent(movieId: Int): Intent {
+      return Intent(this, UserMoviesActivity::class.java).apply {
+        putExtra(Companion.TYPE, Companion.SIMLAR_INTENT).putExtra(EXTRA_MOVIE_ID, movieId)
+      }
+    }
   }
 }

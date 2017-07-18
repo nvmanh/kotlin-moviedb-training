@@ -15,9 +15,11 @@ class UserMoviesPresenter(
   private var onLoadMoreListener: EndlessRecyclerOnScrollListener? = null
   private var mMovieList: List<Movie>? = null
   private var mType = ""
+  private var mMovieId = 0
 
-  override fun getMovies(type:String) {
+  override fun getMovies(type: String, movieId: Int) {
     mType = type
+    mMovieId = movieId
     getUserMovies(mPage)
   }
 
@@ -32,7 +34,7 @@ class UserMoviesPresenter(
       mViewModel.showSnack(App.self().getString(R.string.err_network))
       return
     }
-    mMovieList = RequestHelper.getUserMovies(page, mType, mViewModel)!!
+    mMovieList = RequestHelper.getUserMovies(page, mType, mMovieId, mViewModel)!!
   }
 
   private fun addEndlessRecyclerOnScrollListener() {

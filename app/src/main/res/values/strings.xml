@@ -46,6 +46,9 @@
     <string name="str_rate">RATE</string>
     <string name="err_occur">Error occured, please try again later.</string>
     <string name="str_rate_icon">R</string>
+    <string name="str_similar">Similar</string>
+    <string name="str_web">web</string>
+    <string name="str_similar_movies">Similar Movies</string>
 
     <string-array name="nav_item_activity_titles">
         <item>Now Playing</item>

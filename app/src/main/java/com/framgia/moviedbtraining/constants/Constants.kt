@@ -23,6 +23,7 @@ object Constants {
   val TYPE = "api_type"
   val FAVOURITE_INTENT = "fav_extra"
   val RATING_INTENT = "rating_extra"
+  val SIMLAR_INTENT = "similar_extra"
   val EXTRA_MOVIE_ID = "extra_movie_id"
   val IMAGE_EXTRA = "image_extra"
   //Languages

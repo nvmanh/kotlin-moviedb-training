@@ -134,7 +134,7 @@ object RequestHelper {
     })
   }
 
-  fun getUserMovies(page: Int, type: String,
+  fun getUserMovies(page: Int, type: String, mMovieId: Int,
       mViewModel: UserMoviesContract.ViewModel): List<Movie>? {
     val user: User = mPref.getUser()
     val sessionId = mPref.getPrefData(Keys.SESSION_ID)
@@ -148,6 +148,9 @@ object RequestHelper {
       }
       Constants.RATING_INTENT -> {
         call = apiService.getRated(Constants.API_KEY, sessionId, user.language!!, page)
+      }
+      Constants.SIMLAR_INTENT -> {
+        call = apiService.getSimilar(mMovieId, Constants.API_KEY, user.language!!, page)
       }
     }
     call!!.enqueue(object : Callback<MoviesResponse> {

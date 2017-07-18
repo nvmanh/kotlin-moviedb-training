@@ -36,6 +36,11 @@ interface ApiInterface {
       @Query("language") language: String,
       @Query("page") page: Int): Call<MoviesResponse>
 
+  @GET("movie/{movie_id}/similar")
+  fun getSimilar(@Path("movie_id") movieId: Int, @Query("api_key") apiKey: String,
+      @Query("language") language: String,
+      @Query("page") page: Int): Call<MoviesResponse>
+
   @GET("search/movie")
   fun getResultSearch(@Query("api_key") apiKey: String,
       @Query("query") query: String,

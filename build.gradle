@@ -38,4 +38,5 @@ ext{
   loggingVersion = '3.2.0'
   gsonConverterVersion = '2.0.2'
   constraintVersion = '1.0.2'
+  ormLiteVersion = '4.48'
 }
